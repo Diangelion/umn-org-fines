@@ -1,0 +1,20 @@
+# Logs
+*.log               # Log files
+npm-debug.log*      # NPM debug logs
+yarn-debug.log*     # Yarn debug logs
+yarn-error.log*
+
+# HTMX Frontend
+frontend/node_modules/       # Node.js dependencies (if used)
+frontend/dist/               # Build output (if you use a bundler)
+frontend/.env                # Environment variables for frontend (optional)
+frontend/*.map               # Source map files
+frotnend/package.json
+
+# Golang Backend
+backend/bin/                # Compiled binaries
+backend/*.exe               # Windows executable files
+backend/*.out               # Go build outputs
+backend/*.test              # Go test binaries
+backend/coverage/           # Coverage output folder (if used)
+backend/go.sum              # Optional, but you might want to keep this if not shared
