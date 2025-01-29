@@ -1,0 +1,95 @@
+<div class="flex min-h-screen items-center justify-center bg-gray-300">
+  <div class="w-full max-w-md rounded-lg bg-neutral-100 p-6 shadow-md">
+    <h1 class="mb-4 text-center text-3xl font-bold text-gray-700">Sign Up</h1>
+    <p class="mb-6 text-center text-black">It's quick and easy.</p>
+
+    <form class="space-y-4" hx-post="/api/register">
+      <!-- Name -->
+      <input
+        type="text"
+        name="first_name"
+        placeholder="Name"
+        required
+        class="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+        pattern="^[a-zA-Z\s]+$"
+        title="Only letters and spaces allowed"
+      />
+
+      <!-- Email -->
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+        class="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        title="Please enter a valid email address (e.g., user@example.com)"
+      />
+
+      <!-- Password -->
+      <div class="relative">
+        <input
+          id="register-password"
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          class="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+          pattern=".{8,}"
+          title="Password must be at least 8 characters"
+          hx-on:input="triggerTogglePassword(this.value, 'toggle-password')"
+        />
+
+        <span
+          id="toggle-password"
+          class="absolute top-[50%] right-4 hidden -translate-y-1/2 transform cursor-pointer"
+          hx-get="icons/eye_closed.html"
+          hx-trigger="load"
+          hx-swap="innerHTML"
+          hx-on:click="togglePassword('register-password', this)"
+        >
+        </span>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="relative">
+        <input
+          id="register-confirm-password"
+          type="password"
+          name="confirm_password"
+          placeholder="Confirm Password"
+          required
+          class="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
+          pattern=".{8,}"
+          title="Confirm password must be at least 8 characters"
+          hx-on:input="triggerTogglePassword(this.value, 'toggle-confirm-password')"
+        />
+
+        <span
+          id="toggle-confirm-password"
+          class="absolute top-[50%] right-4 hidden -translate-y-1/2 transform cursor-pointer"
+          hx-get="icons/eye_closed.html"
+          hx-trigger="load"
+          hx-swap="innerHTML"
+          hx-on:click="togglePassword('register-confirm-password', this)"
+        >
+        </span>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full cursor-pointer rounded bg-gray-700 py-2 text-lg font-semibold text-neutral-100 transition hover:opacity-85"
+      >
+        Sign Up
+      </button>
+    </form>
+
+    <hr class="my-6" />
+    <div class="text-center">
+      <a href="#" class="font-semibold text-gray-700"
+        >Already have an account?</a
+      >
+    </div>
+  </div>
+</div>

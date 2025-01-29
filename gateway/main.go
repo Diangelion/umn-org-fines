@@ -3,19 +3,26 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
-
-	"umn-org-fines/backend/config"
-	"umn-org-fines/backend/internal/handlers"
-	"umn-org-fines/backend/internal/repositories"
-	"umn-org-fines/backend/internal/services"
+	"umn-org-fines/gateway/config"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 )
+
+func homePage(w http.ResponseWriter, r *http.Request) {
+    tmpl, err := template.ParseFiles("templates/index.html")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.Header().Set("Content-Type", "text/html")
+    tmpl.Execute(w, nil)
+}
 
 func main() {
 	// Load .env file (Only for local development)
@@ -56,4 +63,8 @@ func main() {
 	serverURL := fmt.Sprintf("http://localhost:%s", port)
 	fmt.Println("Server running at:", serverURL)
 	log.Fatal(http.ListenAndServe(":"+port, router))
+    http.HandleFunc("/", homePage)
+
+    // Start the server on port 8080
+    http.ListenAndServe(":8080", nil)
 }
