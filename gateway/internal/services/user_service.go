@@ -1,0 +1,30 @@
+package services
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"gateway/config"
+	"gateway/internal/models"
+	"net/http"
+)
+
+// ForwardUserRegistration forwards the user registration request to the backend service
+func ForwardUserRegistration(user models.User) (*http.Response, error) {
+	cfg := config.LoadConfig()
+
+	// Prepare the request to the backend service
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal user data: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/api/register", cfg.BackendURL), bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	return client.Do(req)
+}

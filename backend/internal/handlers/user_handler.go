@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"umn-org-fines/internal/models"
-	"umn-org-fines/internal/services"
+	"umn-org-fines/backend/internal/models"
+	"umn-org-fines/backend/internal/services"
 )
 
 type UserHandler struct {

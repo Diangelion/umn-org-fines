@@ -1,4 +1,4 @@
-module umn-org-fines
+module umn-org-fines/backend
 
 go 1.23.5
 

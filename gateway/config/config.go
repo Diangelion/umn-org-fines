@@ -10,6 +10,7 @@ import (
 // Config struct holds all the environment variables
 type Config struct {
 	HTTPPort   string
+	BackendURL string
 }
 
 // LoadConfig reads from environment variables or .env file
@@ -21,5 +22,6 @@ func LoadConfig() *Config {
 
 	return &Config{
 		HTTPPort:   os.Getenv("PORT"),
+		BackendURL:   os.Getenv("BACKEND_URL"),
 	}
 }
