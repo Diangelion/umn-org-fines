@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"backend/internal/models"
 	"database/sql"
-	"umn-org-fines/internal/models"
 )
 
 type UserRepository struct {

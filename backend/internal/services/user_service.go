@@ -1,8 +1,8 @@
 package services
 
 import (
-	"umn-org-fines/internal/models"
-	"umn-org-fines/internal/repositories"
+	"backend/internal/models"
+	"backend/internal/repositories"
 )
 
 type UserService struct {

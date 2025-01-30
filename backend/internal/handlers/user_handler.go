@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"backend/internal/models"
+	"backend/internal/services"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"umn-org-fines/backend/internal/models"
-	"umn-org-fines/backend/internal/services"
 )
 
 type UserHandler struct {

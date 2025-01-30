@@ -5,28 +5,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
-	"umn-org-fines/backend/config"
-	"umn-org-fines/backend/internal/handlers"
-	"umn-org-fines/backend/internal/repositories"
-	"umn-org-fines/backend/internal/services"
+	"backend/config"
+	"backend/internal/handlers"
+	"backend/internal/repositories"
+	"backend/internal/services"
 
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	// Load .env file (Only for local development)
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using system environment variables.")
-	}
-
-	// Set the port (use environment variable or default to 8080)
-	port := os.Getenv("HTTP_PORT")
-
-	// Load configuration
 	cfg := config.LoadConfig()
 
 	// Connect to the database
@@ -53,7 +42,7 @@ func main() {
 	router.HandleFunc("/register", userHandler.Register).Methods("POST")
 
 	// Start the server
-	serverURL := fmt.Sprintf("http://localhost:%s", port)
+	serverURL := fmt.Sprintf("http://localhost:%s", cfg.HTTPPort)
 	fmt.Println("Server running at:", serverURL)
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, router))
 }

@@ -9,11 +9,9 @@ import (
 	"net/http"
 )
 
-// ForwardUserRegistration forwards the user registration request to the backend service
 func ForwardUserRegistration(user models.User) (*http.Response, error) {
 	cfg := config.LoadConfig()
 
-	// Prepare the request to the backend service
 	jsonData, err := json.Marshal(user)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal user data: %w", err)
