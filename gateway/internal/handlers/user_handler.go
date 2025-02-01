@@ -1,30 +1,48 @@
 package handlers
 
 import (
-	"encoding/json"
+	"fmt"
 	"gateway/internal/models"
 	"gateway/internal/services"
 	"io"
 	"net/http"
+
+	"gateway/utils"
 )
 
+func generalErrorMessage(typeForm *string) string {
+	return fmt.Sprintf("Please check again your %s form and try again.", *typeForm)
+}
+
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Unable to read request body", http.StatusBadRequest)
+	typeMessage := "registration"
+
+	// Parse form data
+	if err := utils.ParseRequestBody(r); err != nil {
+		errParse := fmt.Sprintf("Error: invalid input. %s", generalErrorMessage(&typeMessage))
+		http.Error(w, errParse, http.StatusBadRequest)
 		return
 	}
 
-	var user models.User
-	if err := json.Unmarshal(body, &user); err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
-		return
+	// Decode form data into User struct
+    var user models.UserRegistration
+	if err := utils.DecodeRequestBody(r, &user); err != nil {
+		errDecode :=  fmt.Sprintf("Error: invalid %s form. %s", typeMessage, generalErrorMessage(&typeMessage))
+		http.Error(w, errDecode, http.StatusBadRequest)
+        return
 	}
+   
+    // Validate if required fields exist
+    if user.Name == "" || user.Email == "" || user.Password == "" {
+		errMissing := fmt.Sprintf("Error: missing required field(s). %s", generalErrorMessage(&typeMessage))
+        http.Error(w, errMissing, http.StatusBadRequest)
+        return
+    }
 
 	// Forward registration request to the backend service
 	response, err := services.ForwardUserRegistration(user)
 	if err != nil {
-		http.Error(w, "Error forwarding request to backend", http.StatusInternalServerError)
+		http.Error(w, "Error: unable to process the request. Please try again later.", http.StatusInternalServerError)
 		return
 	}
 
@@ -39,31 +57,37 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
-	// Read the request body
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Unable to read request body", http.StatusBadRequest)
+	// Parse form data
+	if err := utils.ParseRequestBody(r); err != nil {
+		http.Error(w, "Unable to parse request body", http.StatusBadRequest)
 		return
 	}
 
-	var user models.User
-	if err := json.Unmarshal(body, &user); err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
-		return
+	// Decode form data into User struct
+    var user models.UserLogin
+	if err := utils.DecodeRequestBody(r, &user); err != nil {
+		http.Error(w, "Unable to process the request due to invalid form data", http.StatusBadRequest)
+        return
 	}
+   
+    // Validate if required fields exist
+    if user.Email == "" || user.Password == "" {
+        http.Error(w, "Unable to process the request due to missing required fields", http.StatusBadRequest)
+        return
+    }
 
-	// Forward registration request to the backend service
-	response, err := services.ForwardUserRegistration(user)
-	if err != nil {
-		http.Error(w, "Error forwarding request to backend", http.StatusInternalServerError)
-		return
-	}
+	// // Forward registration request to the backend service
+	// response, err := services.ForwardUserRegistration(user)
+	// if err != nil {
+	// 	http.Error(w, "Error forwarding request to backend", http.StatusInternalServerError)
+	// 	return
+	// }
 
-	// Return the response from the backend service
-	w.WriteHeader(response.StatusCode)
-	if response.Body != nil {
-		defer response.Body.Close()
-		body, _ := io.ReadAll(response.Body)
-		w.Write(body)
-	}
+	// // Return the response from the backend service
+	// w.WriteHeader(response.StatusCode)
+	// if response.Body != nil {
+	// 	defer response.Body.Close()
+	// 	body, _ := io.ReadAll(response.Body)
+	// 	w.Write(body)
+	// }
 }

@@ -3,6 +3,7 @@ package services
 import (
 	"backend/internal/models"
 	"backend/internal/repositories"
+	"backend/utils"
 )
 
 type UserService struct {
@@ -14,6 +15,15 @@ func NewUserService(repo *repositories.UserRepository) *UserService {
 }
 
 func (s *UserService) RegisterUser(user *models.User) error {
-    // Add any business logic here, like password hashing
+    // Hash the password
+    hashedPassword, errHash := utils.HashPassword(user.Password)
+    if errHash != nil {
+        return errHash
+    }
+
+    // Assign the hashed password back to the user
+    user.Password = hashedPassword
+
+    // Save the user
     return s.repo.CreateUser(user)
 }

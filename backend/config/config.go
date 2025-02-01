@@ -31,7 +31,7 @@ func LoadConfig() *Config {
 		DBPassword: os.Getenv("DB_PASSWORD"),
 		DBName:     os.Getenv("DB_NAME"),
 		DBPort:     os.Getenv("DB_PORT"),
-		HTTPPort:   os.Getenv("HTTP_PORT"),
+		HTTPPort:   os.Getenv("PORT"),
 	}
 }
 

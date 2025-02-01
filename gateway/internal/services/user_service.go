@@ -9,15 +9,15 @@ import (
 	"net/http"
 )
 
-func ForwardUserRegistration(user models.User) (*http.Response, error) {
+func ForwardUserRegistration(user models.UserRegistration) (*http.Response, error) {
 	cfg := config.LoadConfig()
 
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal user data: %w", err)
+		return nil, fmt.Errorf("Failed to marshal user data: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/api/register", cfg.BackendURL), bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/user/register", cfg.BackendURL), bytes.NewBuffer(jsonData))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}

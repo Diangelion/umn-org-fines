@@ -1,7 +1,12 @@
 package models
 
-type User struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+type UserRegistration struct {
+	Name     string `form:"name"`
+	Email    string `form:"email"`
+	Password string `form:"password"`
+}
+
+type UserLogin struct {
+	Email    string `form:"email"`
+	Password string `form:"password"`
 }
