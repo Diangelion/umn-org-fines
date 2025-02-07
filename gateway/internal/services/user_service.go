@@ -14,15 +14,29 @@ func ForwardUserRegistration(user models.UserRegistration) (*http.Response, erro
 
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to marshal user data: %w", err)
+		return nil, fmt.Errorf("failed to marshal user data: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/user/register", cfg.BackendURL), bytes.NewBuffer(jsonData))
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
+	registrationUrl := fmt.Sprintf("%s/user/register", cfg.BackendURL)
+	contentType := "application/json"
+	reqBody := bytes.NewBuffer(jsonData)
 
 	client := &http.Client{}
-	return client.Do(req)
+	return client.Post(registrationUrl, contentType, reqBody)
+}
+
+func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
+	cfg := config.LoadConfig()
+
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal user data: %w", err)
+	}
+
+	loginUrl := fmt.Sprintf("%s/user/login", cfg.BackendURL)
+	contentType := "application/json"
+	reqBody := bytes.NewBuffer(jsonData)
+
+	client := &http.Client{}
+	return client.Post(loginUrl, contentType, reqBody)
 }

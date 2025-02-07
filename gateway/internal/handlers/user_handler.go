@@ -15,11 +15,11 @@ func generalErrorMessage(typeForm *string) string {
 }
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	typeMessage := "registration"
+	typeMsg := "registration"
 
 	// Parse form data
 	if err := utils.ParseRequestBody(r); err != nil {
-		errParse := fmt.Sprintf("Error: invalid input. %s", generalErrorMessage(&typeMessage))
+		errParse := fmt.Sprintf("Error: invalid input. %s", generalErrorMessage(&typeMsg))
 		http.Error(w, errParse, http.StatusBadRequest)
 		return
 	}
@@ -27,14 +27,14 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	// Decode form data into User struct
     var user models.UserRegistration
 	if err := utils.DecodeRequestBody(r, &user); err != nil {
-		errDecode :=  fmt.Sprintf("Error: invalid %s form. %s", typeMessage, generalErrorMessage(&typeMessage))
+		errDecode :=  fmt.Sprintf("Error: invalid %s form. %s", typeMsg, generalErrorMessage(&typeMsg))
 		http.Error(w, errDecode, http.StatusBadRequest)
         return
 	}
    
     // Validate if required fields exist
     if user.Name == "" || user.Email == "" || user.Password == "" {
-		errMissing := fmt.Sprintf("Error: missing required field(s). %s", generalErrorMessage(&typeMessage))
+		errMissing := fmt.Sprintf("Error: missing required field(s). %s", generalErrorMessage(&typeMsg))
         http.Error(w, errMissing, http.StatusBadRequest)
         return
     }
@@ -57,37 +57,42 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
+	typeMsg := "login"
+
 	// Parse form data
 	if err := utils.ParseRequestBody(r); err != nil {
-		http.Error(w, "Unable to parse request body", http.StatusBadRequest)
+		errParse := fmt.Sprintf("Error: invalid input. %s", generalErrorMessage(&typeMsg))
+		http.Error(w, errParse, http.StatusBadRequest)
 		return
 	}
 
 	// Decode form data into User struct
     var user models.UserLogin
 	if err := utils.DecodeRequestBody(r, &user); err != nil {
-		http.Error(w, "Unable to process the request due to invalid form data", http.StatusBadRequest)
+		errDecode :=  fmt.Sprintf("Error: invalid %s form. %s", typeMsg, generalErrorMessage(&typeMsg))
+		http.Error(w, errDecode, http.StatusBadRequest)
         return
 	}
    
     // Validate if required fields exist
     if user.Email == "" || user.Password == "" {
-        http.Error(w, "Unable to process the request due to missing required fields", http.StatusBadRequest)
+		errMissing := fmt.Sprintf("Error: missing required field(s). %s", generalErrorMessage(&typeMsg))
+        http.Error(w, errMissing, http.StatusBadRequest)
         return
     }
 
-	// // Forward registration request to the backend service
-	// response, err := services.ForwardUserRegistration(user)
-	// if err != nil {
-	// 	http.Error(w, "Error forwarding request to backend", http.StatusInternalServerError)
-	// 	return
-	// }
+	// Forward registration request to the backend service
+	response, err := services.ForwardUserLogin(user)
+	if err != nil {
+		http.Error(w, "Error: unable to process the request. Please try again later.", http.StatusInternalServerError)
+		return
+	}
 
-	// // Return the response from the backend service
-	// w.WriteHeader(response.StatusCode)
-	// if response.Body != nil {
-	// 	defer response.Body.Close()
-	// 	body, _ := io.ReadAll(response.Body)
-	// 	w.Write(body)
-	// }
+	// Return the response from the backend service
+	w.WriteHeader(response.StatusCode)
+	if response.Body != nil {
+		defer response.Body.Close()
+		body, _ := io.ReadAll(response.Body)
+		w.Write(body)
+	}
 }

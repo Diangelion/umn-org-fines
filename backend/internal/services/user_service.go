@@ -14,16 +14,21 @@ func NewUserService(repo *repositories.UserRepository) *UserService {
     return &UserService{repo}
 }
 
-func (s *UserService) RegisterUser(user *models.User) error {
+func (s *UserService) RegisterUser(user *models.UserRegistration) error {
     // Hash the password
     hashedPassword, errHash := utils.HashPassword(user.Password)
     if errHash != nil {
         return errHash
     }
-
-    // Assign the hashed password back to the user
     user.Password = hashedPassword
 
     // Save the user
     return s.repo.CreateUser(user)
+}
+
+func (s *UserService) LoginUser(user *models.UserLogin) error {
+    if errCheck := s.repo.CheckCredential(user); errCheck != nil {
+        return errCheck
+    }
+    return nil
 }

@@ -17,16 +17,35 @@ func NewUserHandler(service *services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
-    var user models.User
-    if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-        http.Error(w, "Failed: invalid JSON payload", http.StatusBadRequest)
+    var user models.UserRegistration
+
+    // Assign request body to user for validation
+    if errDecode := json.NewDecoder(r.Body).Decode(&user); errDecode != nil {
+        utils.SendJSONResponse(w, http.StatusBadRequest, "invalid JSON payload", nil)
         return
     }
 
-    if err := h.service.RegisterUser(&user); err != nil {
-        http.Error(w, "Failed: cannot register user.", http.StatusInternalServerError)
+    if errRegister := h.service.RegisterUser(&user); errRegister != nil {
+        utils.SendJSONResponse(w, http.StatusInternalServerError, errRegister.Error(), nil)
         return
     }
 
     utils.SendJSONResponse(w, http.StatusCreated, "Success: user created", user)
+}
+
+func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+    var user models.UserLogin
+    
+    // Assign request body to user for validation
+    if errDecode := json.NewDecoder(r.Body).Decode(&user); errDecode != nil {
+        utils.SendJSONResponse(w, http.StatusBadRequest, "invalid JSON payload", nil)
+        return
+    }
+
+    if errLogin := h.service.LoginUser(&user); errLogin != nil {
+        utils.SendJSONResponse(w, http.StatusInternalServerError, errLogin.Error(), nil)
+        return
+    }
+
+    utils.SendJSONResponse(w, http.StatusCreated, "session created", user)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gateway/config"
 	"gateway/internal/handlers"
+	"gateway/middleware"
 	"log"
 	"net/http"
 
@@ -17,6 +18,8 @@ func main() {
 	// // Apply middleware
 	// router.Use(middlewares.LoggingMiddleware)
 
+	handlerWithCORS := middleware.CORSMiddleware(router)
+
 	// Define routes
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
@@ -25,5 +28,5 @@ func main() {
 	// Start the server
 	serverURL := fmt.Sprintf("http://localhost:%s", cfg.HTTPPort)
 	fmt.Println("Gateway running at", serverURL)
-	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, router))
+	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, router), handlerWithCORS)
 }

@@ -40,6 +40,7 @@ func main() {
 
 	authRouter := router.PathPrefix("/user").Subrouter()
 	authRouter.HandleFunc("/register", userHandler.Register).Methods("POST")
+	authRouter.HandleFunc("/login", userHandler.Login).Methods("POST")
 
 	// Start the server
 	serverURL := fmt.Sprintf("http://localhost:%s", cfg.HTTPPort)

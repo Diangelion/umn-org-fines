@@ -3,7 +3,14 @@
     <h1 class="mb-4 text-center text-3xl font-bold text-gray-700">Sign Up</h1>
     <p class="mb-6 text-center text-black">It's quick and easy.</p>
 
-    <form class="space-y-4" hx-post="/api/register">
+    <!-- Register Form -->
+    <form
+      id="register-form"
+      method="POST"
+      class="space-y-4"
+      hx-post="http://localhost:6666/auth/register"
+      hx-on::after-request="this.reset()"
+    >
       <!-- Name -->
       <input
         type="text"
@@ -76,10 +83,14 @@
         </span>
       </div>
 
+      <!-- Error Message -->
+      <p id="register-error-message" class="mt-0 text-red-500"></p>
+
       <!-- Submit Button -->
       <button
-        type="submit"
+        type="button"
         class="w-full cursor-pointer rounded bg-gray-700 py-2 text-lg font-semibold text-neutral-100 transition hover:opacity-85"
+        hx-on:click="matchPasswordAndConfirmationPassword()"
       >
         Sign Up
       </button>
@@ -87,8 +98,8 @@
 
     <hr class="my-6" />
     <div class="text-center">
-      <a href="#" class="font-semibold text-gray-700"
-        >Already have an account?</a
+      <span class="cursor-pointer font-semibold text-gray-700 hover:underline"
+        >Already have an account?</span
       >
     </div>
   </div>
