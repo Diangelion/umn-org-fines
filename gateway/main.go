@@ -18,15 +18,16 @@ func main() {
 	// // Apply middleware
 	// router.Use(middlewares.LoggingMiddleware)
 
-	handlerWithCORS := middleware.CORSMiddleware(router)
-
 	// Define routes
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
 	authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
 
+	// Wrap the router with your CORS middleware so that every request goes through it.
+	handlerWithCORS := middleware.CORS(router)
+
 	// Start the server
 	serverURL := fmt.Sprintf("http://localhost:%s", cfg.HTTPPort)
 	fmt.Println("Gateway running at", serverURL)
-	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, router), handlerWithCORS)
+	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, handlerWithCORS))
 }

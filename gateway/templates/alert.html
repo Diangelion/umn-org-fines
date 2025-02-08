@@ -1,0 +1,24 @@
+<!-- Alert Message -->
+<div
+  id="alert-message"
+  class="absolute flex h-screen w-screen items-center justify-center bg-[rgb(0,0,0)]/25"
+>
+  <div class="h-[25vh] w-[30vw] rounded-2xl bg-neutral-100 p-5">
+    <div class="box-border flex h-full w-full flex-col">
+      <div class="mb-[auto]">
+        <h2 class="text-center font-bold text-gray-700">{{ .Title }}</h2>
+        <hr class="my-2" />
+        <p>{{ .Message }}</p>
+      </div>
+      <div class="flex w-full justify-end">
+        <button
+          type="button"
+          class="w-fit cursor-pointer justify-self-end rounded-md bg-gray-700 px-2 py-1 text-neutral-100 hover:opacity-85"
+          onclick="dismissAlert()"
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

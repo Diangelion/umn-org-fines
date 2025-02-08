@@ -5,10 +5,6 @@ function triggerTogglePassword(inputValue, toggleId) {
   } else {
     document.getElementById(toggleId).classList.add("hidden");
   }
-
-  // Clear the error message
-  const errorContainer = document.getElementById("register-error-message");
-  if (errorContainer.innerText) errorContainer.innerText = "";
 }
 
 function togglePassword(inputId, toggleIcon) {
@@ -18,22 +14,16 @@ function togglePassword(inputId, toggleIcon) {
   // Change input type to text/password depends on current state
   input.type = input.type === "password" ? "text" : "password";
 
-  // Get current hx-get state
-  const currentHxGet = toggleIcon.getAttribute("hx-get");
+  // Get current src value
+  const currentSrc = toggleIcon.getAttribute("src");
 
-  // Change hx-get attribute's value if toggle icon is clicked
+  // Change src attribute's value if toggle icon is clicked
   toggleIcon.setAttribute(
-    "hx-get",
-    currentHxGet.includes("opened")
-      ? "icons/eye_closed.html"
-      : "icons/eye_opened.html",
+    "src",
+    currentSrc.includes("opened")
+      ? currentSrc.replace("opened", "closed")
+      : currentSrc.replace("closed", "opened"),
   );
-
-  // Re-trigger the hx-get to render the reusable icon
-  htmx.ajax("GET", toggleIcon.getAttribute("hx-get"), {
-    target: toggleIcon,
-    swap: "innerHTML",
-  });
 }
 
 function matchPasswordAndConfirmationPassword() {
@@ -42,18 +32,16 @@ function matchPasswordAndConfirmationPassword() {
   const confirmPassword = document.getElementById(
     "register-confirm-password",
   ).value;
-  const errorContainer = document.getElementById("register-error-message");
-
-  // Clear previous errors
-  errorContainer.innerText = "";
 
   // Validation check
   if (password !== confirmPassword) {
-    errorContainer.innerText =
-      "Password and Confirmation Password do not match!";
-    return;
   }
 
   // Submit form to trigger hx-post
   document.getElementById("register-form").requestSubmit();
+}
+
+function errorRegister(event) {
+  const response = event.detail?.errorInfo?.xhr?.response;
+  document.getElementById("register-error-container").outerHTML = response;
 }
