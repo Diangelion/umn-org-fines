@@ -12,9 +12,9 @@ import (
 func ForwardUserRegistration(user models.UserRegistration) (*http.Response, error) {
 	cfg := config.LoadConfig()
 
-	jsonData, err := json.Marshal(user)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal user data: %w", err)
+	jsonData, errMarshal := json.Marshal(user)
+	if errMarshal != nil {
+		return nil, fmt.Errorf("unable to marshal user data: %w", errMarshal)
 	}
 
 	registrationUrl := fmt.Sprintf("%s/user/register", cfg.BackendURL)

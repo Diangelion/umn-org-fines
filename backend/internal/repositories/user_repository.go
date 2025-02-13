@@ -5,6 +5,8 @@ import (
 	"backend/utils"
 	"database/sql"
 	"fmt"
+
+	"github.com/lib/pq"
 )
 
 type UserRepository struct {
@@ -15,10 +17,13 @@ func NewUserRepository(db *sql.DB) *UserRepository {
     return &UserRepository{db}
 }
 
-func (r *UserRepository) SaveCredential(userID string, user *models.UserRegistration) {
+func (r *UserRepository) SaveCredential(userID string, user *models.UserRegistration) error {
     // Insert user into the database
     query := "INSERT INTO user_credentials (user_id, password) VALUES ($1, $2)"
-    r.db.QueryRow(query, userID, user.Password)
+    if errCreateCredentials := r.db.QueryRow(query, userID, user.Password); errCreateCredentials != nil {
+        return errCreateCredentials.Err()
+    }
+    return nil
 }
 
 func (r *UserRepository) CreateUser(user *models.UserRegistration) error {
@@ -27,11 +32,15 @@ func (r *UserRepository) CreateUser(user *models.UserRegistration) error {
     // Insert user into the database
     query := "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id"
     if errCreate := r.db.QueryRow(query, user.Name, user.Email).Scan(&userID); errCreate != nil {
+         // Check if the error is from a unique constraint
+		if pgErr, ok := errCreate.(*pq.Error); ok {
+			if pgErr.Code == "23505" { // Unique violation error code
+				return &models.DuplicateEmailError{Email: user.Email}
+			}
+		}
         return errCreate
     }
-
-    r.SaveCredential(userID, user)
-    return nil
+    return r.SaveCredential(userID, user)
 }
 
 

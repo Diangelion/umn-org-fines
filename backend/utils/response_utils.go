@@ -3,6 +3,7 @@ package utils
 import (
 	"backend/internal/models"
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -17,4 +18,11 @@ func SendJSONResponse(w http.ResponseWriter, statusCode int, message string, dat
 	}
 
 	json.NewEncoder(w).Encode(response)
+}
+
+func StatusCodeForError(err error, dupErr interface{}, customStatusCode int) int {
+    if errors.As(err, &dupErr) {
+        return customStatusCode
+    }
+    return http.StatusInternalServerError
 }

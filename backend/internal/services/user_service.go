@@ -16,13 +16,13 @@ func NewUserService(repo *repositories.UserRepository) *UserService {
 
 func (s *UserService) RegisterUser(user *models.UserRegistration) error {
     // Hash the password
-    hashedPassword, errHash := utils.HashPassword(user.Password)
-    if errHash != nil {
+    if hashedPassword, errHash := utils.HashPassword(user.Password); errHash != nil {
         return errHash
+    } else {
+        user.Password = hashedPassword // Store in user model
     }
-    user.Password = hashedPassword
 
-    // Save the user
+    // Create the user
     return s.repo.CreateUser(user)
 }
 

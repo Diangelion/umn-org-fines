@@ -8,14 +8,14 @@ import (
 	"path/filepath"
 )
 
-func GetAlert(title string, errMsg string) interface{} {
+func getAlert(title string, errMsg string) interface{} {
 	return models.Alert{
 		Title: title,
 		Message: errMsg,
 	}
 }
 
-func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string, statusCode int) {
+func sendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string, statusCode int) {
 	// Locate the template file
 	templatePath := filepath.Join("templates", fileName)
 	tmpl, err := template.ParseFiles(templatePath)
@@ -33,4 +33,9 @@ func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName 
 		log.Println("Template execution error:", err)
 		return
 	}
+}
+
+func SendAlert(w http.ResponseWriter, alertTitle string, errMsg string, fileName string, statusCode int) {
+	document := getAlert(alertTitle, errMsg)
+	sendHTMLDocumentResponse(w, document, fileName, statusCode)
 }

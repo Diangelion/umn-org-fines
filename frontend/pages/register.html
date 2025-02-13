@@ -1,8 +1,8 @@
-<div
-  id="register-container"
-  class="flex min-h-screen items-center justify-center bg-gray-300"
->
-  <div class="w-full max-w-md rounded-lg bg-neutral-100 p-6 shadow-md">
+<div id="register-container" class="h-full w-full">
+  <h1 class="mb-5 text-center text-5xl font-bold text-gray-600">ForFe</h1>
+  <div
+    class="mx-auto w-xs rounded-lg bg-neutral-100 p-6 shadow-md sm:w-sm md:w-md"
+  >
     <h1 class="mb-4 text-center text-3xl font-bold text-gray-700">Sign Up</h1>
     <p class="mb-6 text-center text-black">It's quick and easy.</p>
 
@@ -58,7 +58,7 @@
           id="toggle-password"
           src="../icons/eye_closed.svg"
           class="absolute top-[50%] right-4 hidden -translate-y-1/2 transform cursor-pointer"
-          hx-on:click="togglePassword('register-password', this)"
+          onclick="togglePassword('register-password', this)"
         />
       </div>
 
@@ -79,7 +79,7 @@
           id="toggle-confirm-password"
           src="../icons/eye_closed.svg"
           class="absolute top-[50%] right-4 hidden -translate-y-1/2 transform cursor-pointer"
-          hx-on:click="togglePassword('register-confirm-password', this)"
+          onclick="togglePassword('register-confirm-password', this)"
         />
       </div>
 
@@ -95,7 +95,11 @@
 
     <hr class="my-6" />
     <div class="text-center">
-      <span class="cursor-pointer font-semibold text-gray-700 hover:underline"
+      <span
+        hx-get="pages/login.html"
+        hx-target="main"
+        hx-swap="innerHTML"
+        class="cursor-pointer font-semibold text-gray-700 hover:underline"
         >Already have an account?</span
       >
     </div>

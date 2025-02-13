@@ -37,6 +37,13 @@ function matchPasswordAndConfirmationPassword() {
   if (password !== confirmPassword) {
   }
 
+  ["toggle-password", "toggle-confirm-password"].forEach(
+    (toggleId) => triggerTogglePassword("", toggleId),
+    // togglePassword(
+    //   toggleId.replace("toggle", "register"),
+    //   document.getElementById(toggleId),
+    // ),
+  );
   // Submit form to trigger hx-post
   document.getElementById("register-form").requestSubmit();
 }
