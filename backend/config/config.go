@@ -10,12 +10,12 @@ import (
 
 // Config struct holds all the environment variables
 type Config struct {
+	HTTPPort   string
 	DBHost     string
 	DBUser     string
 	DBPassword string
 	DBName     string
 	DBPort     string
-	HTTPPort   string
 }
 
 // LoadConfig reads from environment variables or .env file
@@ -26,12 +26,12 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
+		HTTPPort:   os.Getenv("PORT"),
 		DBHost:     os.Getenv("DB_HOST"),
 		DBUser:     os.Getenv("DB_USER"),
 		DBPassword: os.Getenv("DB_PASSWORD"),
 		DBName:     os.Getenv("DB_NAME"),
 		DBPort:     os.Getenv("DB_PORT"),
-		HTTPPort:   os.Getenv("PORT"),
 	}
 }
 

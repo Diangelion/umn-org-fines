@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -11,6 +12,13 @@ import (
 type Config struct {
 	HTTPPort   string
 	BackendURL string
+	DBHost     string
+	DBUser     string
+	DBPassword string
+	DBName     string
+	DBPort     string
+	JWTAccessKey string
+	JWTRefreshKey string
 }
 
 // LoadConfig reads from environment variables or .env file
@@ -23,5 +31,21 @@ func LoadConfig() *Config {
 	return &Config{
 		HTTPPort:   os.Getenv("PORT"),
 		BackendURL:   os.Getenv("BACKEND_URL"),
+		DBHost:     os.Getenv("DB_HOST"),
+		DBUser:     os.Getenv("DB_USER"),
+		DBPassword: os.Getenv("DB_PASSWORD"),
+		DBName:     os.Getenv("DB_NAME"),
+		DBPort:     os.Getenv("DB_PORT"),
+		JWTAccessKey: os.Getenv("JWT_ACCESS_KEY"),
+		JWTRefreshKey: os.Getenv("JWT_REFRESH_KEY"),
 	}
+}
+
+
+// GetConnectionString returns a PostgreSQL connection string
+func (c *Config) GetConnectionString() string {
+	return fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		c.DBHost, c.DBUser, c.DBPassword, c.DBName, c.DBPort,
+	)
 }

@@ -21,18 +21,20 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
     var user *models.UserRegistration
 
     // Assign request body to user for validation
-    if errDecode := json.NewDecoder(r.Body).Decode(&user); errDecode != nil {
-        log.Println(errDecode.Error())
+    if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+        log.Println(err)
         utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload", nil)
         return
     }
 
     // Perform registration
-    if errRegister := h.service.RegisterUser(user); errRegister != nil {
+    if err := h.service.RegisterUser(user); err != nil {
+        log.Println(err)
+
         // Handle duplicate email specifically, differentiate with response status code
         var dupErr *models.DuplicateEmailError
-        statusCode := utils.StatusCodeForError(errRegister, dupErr, http.StatusConflict)
-        utils.SendJSONResponse(w, statusCode, errRegister.Error(), nil)
+        statusCode := utils.StatusCodeForError(err, dupErr, http.StatusConflict)
+        utils.SendJSONResponse(w, statusCode, err.Error(), nil)
         return
     }
 
@@ -43,15 +45,18 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
     var user models.UserLogin
     
     // Assign request body to user for validation
-    if errDecode := json.NewDecoder(r.Body).Decode(&user); errDecode != nil {
-        utils.SendJSONResponse(w, http.StatusBadRequest, "invalid JSON payload", nil)
+    if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+        log.Println(err)
+        utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload", nil)
         return
     }
 
-    if errLogin := h.service.LoginUser(&user); errLogin != nil {
-        utils.SendJSONResponse(w, http.StatusInternalServerError, errLogin.Error(), nil)
+    userId, err := h.service.LoginUser(&user);
+    if err != nil {
+        utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
         return
     }
 
-    utils.SendJSONResponse(w, http.StatusCreated, "session created", user)
+    data := models.UserId{UserId: userId}
+    utils.SendJSONResponse(w, http.StatusCreated, "Session created", data)
 }

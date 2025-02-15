@@ -13,7 +13,13 @@
     class="mx-auto w-xs rounded-lg bg-neutral-100 p-8 shadow-md sm:w-sm md:w-md"
   >
     <p class="mb-6 text-center">Log in to your account</p>
-    <form action="/login" method="POST">
+    <form
+      id="login-form"
+      hx-post="http://127.0.0.1:3334/auth/login"
+      hx-target="#login-container"
+      hx-trigger="submit"
+      hx-swap="beforeend"
+    >
       <div class="mb-4">
         <label class="mb-2 block text-sm font-semibold" for="email"
           >Email</label

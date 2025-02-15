@@ -3,18 +3,21 @@ package services
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"gateway/config"
 	"gateway/internal/models"
+	"log"
 	"net/http"
 )
 
-func ForwardUserRegistration(user models.UserRegistration) (*http.Response, error) {
-	cfg := config.LoadConfig()
+var cfg = config.LoadConfig()
 
-	jsonData, errMarshal := json.Marshal(user)
-	if errMarshal != nil {
-		return nil, fmt.Errorf("unable to marshal user data: %w", errMarshal)
+func ForwardUserRegistration(user models.UserRegistration) (*http.Response, error) {
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		log.Println(err)
+		return nil, errors.New("Unable to marshal user data")
 	}
 
 	registrationUrl := fmt.Sprintf("%s/user/register", cfg.BackendURL)
@@ -26,11 +29,10 @@ func ForwardUserRegistration(user models.UserRegistration) (*http.Response, erro
 }
 
 func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
-	cfg := config.LoadConfig()
-
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal user data: %w", err)
+		log.Println(err)
+		return nil, errors.New("Unable to marshal user data")
 	}
 
 	loginUrl := fmt.Sprintf("%s/user/login", cfg.BackendURL)

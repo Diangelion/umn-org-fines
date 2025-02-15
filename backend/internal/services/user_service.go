@@ -4,6 +4,8 @@ import (
 	"backend/internal/models"
 	"backend/internal/repositories"
 	"backend/utils"
+	"errors"
+	"log"
 )
 
 type UserService struct {
@@ -16,19 +18,21 @@ func NewUserService(repo *repositories.UserRepository) *UserService {
 
 func (s *UserService) RegisterUser(user *models.UserRegistration) error {
     // Hash the password
-    if hashedPassword, errHash := utils.HashPassword(user.Password); errHash != nil {
-        return errHash
-    } else {
-        user.Password = hashedPassword // Store in user model
+    hashedPassword, err := utils.HashPassword(user.Password)
+    if err != nil {
+        log.Println(err)
+        return errors.New("Failed to hash password")
     }
-
+    user.Password = hashedPassword // Store in user model
+    
     // Create the user
     return s.repo.CreateUser(user)
 }
 
-func (s *UserService) LoginUser(user *models.UserLogin) error {
-    if errCheck := s.repo.CheckCredential(user); errCheck != nil {
-        return errCheck
+func (s *UserService) LoginUser(user *models.UserLogin) (string, error) {
+    userId, err := s.repo.CheckCredential(user)
+    if err != nil {
+        return "", err
     }
-    return nil
+    return userId, nil
 }

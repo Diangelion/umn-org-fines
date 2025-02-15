@@ -20,14 +20,16 @@ func main() {
 	cfg := config.LoadConfig()
 
 	// Connect to the database
-	db, errConnect := sql.Open("postgres", cfg.GetConnectionString())
-	if errConnect != nil {
-		log.Fatalf("Failed: unable to connect to database: %v\n", errConnect)
+	db, err := sql.Open("postgres", cfg.GetConnectionString())
+	if err != nil {
+		log.Println(err)
+		return
 	}
 
 	// Verify database connection
-	if errPing := db.Ping(); errPing != nil {
-		log.Fatalf("Failed: database is not reachable: %v\n", errPing)
+	if err := db.Ping(); err != nil {
+		log.Println(err)
+		return
 	}
 	defer db.Close()
 
