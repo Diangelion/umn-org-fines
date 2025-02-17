@@ -15,7 +15,7 @@ func getAlert(title string, errMsg string) interface{} {
 	}
 }
 
-func sendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string, statusCode int) {
+func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string, statusCode int) {
 	// Locate the template file
 	templatePath := filepath.Join("templates", fileName)
 	tmpl, err := template.ParseFiles(templatePath)
@@ -37,5 +37,5 @@ func sendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName 
 
 func SendAlert(w http.ResponseWriter, alertTitle string, errMsg string, fileName string, statusCode int) {
 	document := getAlert(alertTitle, errMsg)
-	sendHTMLDocumentResponse(w, document, fileName, statusCode)
+	SendHTMLDocumentResponse(w, document, fileName, statusCode)
 }

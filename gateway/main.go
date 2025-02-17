@@ -29,9 +29,13 @@ func main() {
 		return
 	}
 	
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(false)
 	
-	// Routes
+	// Page Routes
+	router.HandleFunc("/", handlers.IndexPage).Methods("GET")
+	router.NotFoundHandler = http.HandlerFunc(handlers.NotFound)
+
+	// Auth Routes
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
 	authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")

@@ -16,14 +16,14 @@ var cfg = config.LoadConfig()
 func ForwardUserRegistration(user models.UserRegistration) (*http.Response, error) {
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		log.Println(err)
+		log.Println("ForwardUserRegistration | Marshal error: ", err)
 		return nil, errors.New("Unable to marshal user data")
 	}
 
 	registrationUrl := fmt.Sprintf("%s/user/register", cfg.BackendURL)
 	contentType := "application/json"
 	reqBody := bytes.NewBuffer(jsonData)
-
+	
 	client := &http.Client{}
 	return client.Post(registrationUrl, contentType, reqBody)
 }
@@ -31,7 +31,7 @@ func ForwardUserRegistration(user models.UserRegistration) (*http.Response, erro
 func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		log.Println(err)
+		log.Println("ForwardUserLogin | Marshal error: ", err)
 		return nil, errors.New("Unable to marshal user data")
 	}
 

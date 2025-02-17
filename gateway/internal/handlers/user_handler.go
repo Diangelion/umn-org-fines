@@ -19,7 +19,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Parse form data
 	if err := utils.ParseRequestBody(r); err != nil {
-		log.Println(err)
+		log.Println("RegisterUser | Parse request error: ", err)
 		msg := fmt.Sprintf("Invalid input. %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
 		return
@@ -28,7 +28,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	// Decode form data into User struct
 	var user models.UserRegistration
 	if err := utils.DecodeRequestBody(r, &user); err != nil {
-		log.Println(err)
+		log.Println("RegisterUser | Decode request error: ", err)
 		msg := fmt.Sprintf("Invalid %s form. %s", typeMsg, utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
 		return
@@ -45,7 +45,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	// Forward registration request to the backend service
 	response, err := services.ForwardUserRegistration(user)
 	if err != nil { // This error means the request **did not reach** the backend (e.g., network failure)
-		log.Println(err)
+		log.Println("RegisterUser | Forward registration error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
 	}
@@ -54,42 +54,42 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	// Read and decode JSON response
 	var jsonResponse models.Response
 	if err := json.NewDecoder(response.Body).Decode(&jsonResponse); err != nil {
-		log.Println(err)
+		log.Println("RegisterUser | Decode response error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
 	}
-
+	
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
-		log.Print(jsonResponse.Message)
+		log.Print("RegisterUser | Response not ok: ", jsonResponse.Message)
 		utils.SendAlert(w, "Failed", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
-	} 
+		} 
+		
+		utils.SendAlert(w, "Success", jsonResponse.Message, fileName, http.StatusOK)
+	}
 	
-	utils.SendAlert(w, "Success", jsonResponse.Message, fileName, http.StatusOK)
-}
-
-
-func LoginUser(w http.ResponseWriter, r *http.Request) {
-	typeMsg := "login"
-
-	// Parse form data
-	if err := utils.ParseRequestBody(r); err != nil {
-		log.Println(err)
-		msg := fmt.Sprintf("Invalid input. %s", utils.LoginRegisterErrorMessage(&typeMsg))
-		utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
-		return
-	}
-
-	// Decode form data into User struct
-    var user models.UserLogin
-	if err := utils.DecodeRequestBody(r, &user); err != nil {
-		log.Println(err)
-		msg :=  fmt.Sprintf("Invalid %s form. %s", typeMsg, utils.LoginRegisterErrorMessage(&typeMsg))
-		utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
-        return
-	}
-   
+	
+	func LoginUser(w http.ResponseWriter, r *http.Request) {
+		typeMsg := "login"
+		
+		// Parse form data
+		if err := utils.ParseRequestBody(r); err != nil {
+			log.Println("LoginUser | Parse request error: ", err)
+			msg := fmt.Sprintf("Invalid input. %s", utils.LoginRegisterErrorMessage(&typeMsg))
+			utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
+			return
+		}
+		
+		// Decode form data into User struct
+		var user models.UserLogin
+		if err := utils.DecodeRequestBody(r, &user); err != nil {
+			log.Println("LoginUser | Decode request error: ", err)
+			msg :=  fmt.Sprintf("Invalid %s form. %s", typeMsg, utils.LoginRegisterErrorMessage(&typeMsg))
+			utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
+			return
+		}
+		
     // Validate if required fields exist
     if user.Email == "" || user.Password == "" {
 		log.Printf("Missing required field(s)")
@@ -97,11 +97,11 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
         utils.SendAlert(w, "Error", msg, fileName, http.StatusInternalServerError)
         return
     }
-
+	
 	// Forward registration request to the backend service
 	response, err := services.ForwardUserLogin(user)
 	if err != nil {
-		log.Println(err)
+		log.Println("LoginUser | Forward login error: ", err)
         utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
 	}
@@ -109,14 +109,14 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	// Read and decode JSON response
 	var jsonResponse models.Response
 	if err := json.NewDecoder(response.Body).Decode(&jsonResponse); err != nil {
-		log.Println(err)
+		log.Println("LoginUser | Decode response error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
 	}
 	
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
-		log.Print(jsonResponse.Message)
+		log.Print("LoginUser | Response not ok: ", jsonResponse.Message)
 		utils.SendAlert(w, "Failed", jsonResponse.Message, fileName, http.StatusInternalServerError)
 		return
 	} 
@@ -124,7 +124,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	// Generate an access token
 	accessToken, err := utils.GenerateAccessToken(jsonResponse.Data["user_id"].(string))
 	if err != nil {
-		log.Println(err)
+		log.Print("LoginUser | Generate access token error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
 	}
@@ -132,7 +132,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	// Generate a refresh token
 	refreshToken, err := utils.GenerateRefreshToken(jsonResponse.Data["user_id"].(string))
 	if err != nil {
-		log.Println(err)
+		log.Print("LoginUser | Generate refresh token error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName, http.StatusInternalServerError)
 		return
 	}
@@ -157,11 +157,12 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	
 	w.Header().Set("HX-Target", "main")
 	w.Header().Set("HX-Swap", "innerHTML")
-	w.Header().Set("Content-Length", "0")
+	w.Header().Add("Access-Control-Expose-Headers", "HX")
 	w.WriteHeader(http.StatusOK)
 }
 
 
 func IsLoggedIn(w http.ResponseWriter, r *http.Request) {
-
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, "<div></div>")
 }

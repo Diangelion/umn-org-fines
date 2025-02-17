@@ -16,9 +16,7 @@
     <form
       id="login-form"
       hx-post="http://127.0.0.1:3334/auth/login"
-      hx-target="#login-container"
       hx-trigger="submit"
-      hx-swap="beforeend"
     >
       <div class="mb-4">
         <label class="mb-2 block text-sm font-semibold" for="email"
@@ -62,9 +60,10 @@
       <p>Don't have an account?</p>
       <a
         href="#"
-        hx-get="pages/register.html"
+        hx-get="/pages/register.html"
         hx-target="main"
         hx-swap="innerHTML"
+        hx-push-url="/register"
         class="font-semibold text-gray-600 hover:underline"
         >Sign Up</a
       >

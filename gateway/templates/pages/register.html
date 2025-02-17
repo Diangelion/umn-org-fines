@@ -95,12 +95,15 @@
 
     <hr class="my-6" />
     <div class="text-center">
-      <span
-        hx-get="pages/login.html"
+      <a
+        href="#"
+        hx-get="/pages/login.html"
         hx-target="main"
         hx-swap="innerHTML"
+        hx-push-url="/login"
+        hx-replace-url="true"
         class="cursor-pointer font-semibold text-gray-700 hover:underline"
-        >Already have an account?</span
+        >Already have an account?</a
       >
     </div>
   </div>
