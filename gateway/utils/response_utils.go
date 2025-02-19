@@ -8,14 +8,7 @@ import (
 	"path/filepath"
 )
 
-func getAlert(title string, errMsg string) interface{} {
-	return models.Alert{
-		Title: title,
-		Message: errMsg,
-	}
-}
-
-func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string, statusCode int) {
+func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string) {
 	// Locate the template file
 	templatePath := filepath.Join("templates", fileName)
 	tmpl, err := template.ParseFiles(templatePath)
@@ -24,9 +17,9 @@ func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName 
 		return
 	}
 
-	// Custom httpStatus code (not always 200)
 	// Set status code BEFORE writing content
-	w.WriteHeader(statusCode)
+	// Set always 200 to make hx-swap, hx-target, etc. running
+	w.WriteHeader(http.StatusOK)
 
 	// Execute the template, writing the output to the ResponseWriter.
 	if err := tmpl.Execute(w, data); err != nil {
@@ -35,7 +28,26 @@ func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName 
 	}
 }
 
-func SendAlert(w http.ResponseWriter, alertTitle string, errMsg string, fileName string, statusCode int) {
+// Getter
+func getAlert(title string, errMsg string) interface{} {
+	return models.Alert{
+		Title: title,
+		Message: errMsg,
+	}
+}
+
+func getAuthPage(baseURL string) interface{} {
+	return models.AuthPage{BaseURL: baseURL}
+}
+
+// Setter
+func SendAlert(w http.ResponseWriter, alertTitle string, errMsg string, fileName string) {
 	document := getAlert(alertTitle, errMsg)
-	SendHTMLDocumentResponse(w, document, fileName, statusCode)
+	SendHTMLDocumentResponse(w, document, fileName)
+}
+
+
+func SendAuthPage(w http.ResponseWriter, baseURL string, fileName string) {
+	document := getAuthPage(baseURL)
+	SendHTMLDocumentResponse(w, document, fileName)
 }

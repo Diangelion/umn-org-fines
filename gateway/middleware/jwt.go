@@ -14,17 +14,18 @@ import (
 )
 
 
-type JWT struct {
-    db *sql.DB
+type JWTMiddleware struct {
+    DB *sql.DB
+	Config *config.Config
 }
 
-func NewJWT(db *sql.DB) *JWT {
-    return &JWT{db}
+func NewJWT(db *sql.DB, cfg *config.Config) *JWTMiddleware {
+    return &JWTMiddleware{DB: db, Config: cfg}
 }
 
 var cfg = config.LoadConfig()
 
-func (j *JWT) getJWTKey(whichToken string) (interface{}) {
+func (m *JWTMiddleware) getJWTKey(whichToken string) (interface{}) {
 	returnVal := cfg.JWTAccessKey
 	if (whichToken == "refresh") {
 		returnVal = cfg.JWTRefreshKey
@@ -32,7 +33,7 @@ func (j *JWT) getJWTKey(whichToken string) (interface{}) {
 	return returnVal
 }
 
-func (j *JWT) ParseJWT(tokenValue string, tokenType string) (jwt.MapClaims, error) {
+func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapClaims, error) {
 	// Parse token value
 	parsedToken, err :=  jwt.Parse(tokenValue, func(t *jwt.Token) (interface{}, error) {
 		// Ensure the signing method is HMAC.
@@ -40,7 +41,7 @@ func (j *JWT) ParseJWT(tokenValue string, tokenType string) (jwt.MapClaims, erro
 			log.Println(fmt.Printf("Unexpected signing method: %v", t.Header["alg"]))
 			return nil, errors.New("Invalid signing method")
 		}
-		return j.getJWTKey(tokenType), nil
+		return m.getJWTKey(tokenType), nil
 	})
 
 	// Error handling if error occured / invalid parsed token
@@ -59,21 +60,20 @@ func (j *JWT) ParseJWT(tokenValue string, tokenType string) (jwt.MapClaims, erro
 }
 
 // JWTMiddleware verifies the JWT token in the Authorization header.
-func (j *JWT) JWTMiddleware(next http.Handler) http.Handler {
+func (m *JWTMiddleware) JWTMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userId, err := j.verifyToken(w, r)
+		userId, err := m.verifyToken(w, r)
 		if err != nil {
 			log.Println(err)
 			w.Header().Set("HX-Reswap", "main")
-			w.Header().Set("HX-Retarget", "outerHTML")
-			w.WriteHeader(http.StatusOK)
-			utils.SendHTMLDocumentResponse(w, nil, "pages/login.html", http.StatusAccepted)
+			w.Header().Set("HX-Retarget", "innerHTML")
+			utils.SendAuthPage(w, m.Config.BaseURL, "pages/login.html")
 			return
 		}
 
 		// Validate user existence in DB
-		if !j.isUserExists(userId) {
-			utils.SendAlert(w, "Error", "Unauthorized", "alert.html", http.StatusUnauthorized)
+		if !m.isUserExists(userId) {
+			utils.SendAlert(w, "Error", "Invalid user.", "alert.html")
 			return
 		}
 
@@ -82,10 +82,10 @@ func (j *JWT) JWTMiddleware(next http.Handler) http.Handler {
 }
 
 // verifyToken checks for access_token first, then refresh_token if access_token is invalid.
-func (j *JWT) verifyToken(w http.ResponseWriter, r *http.Request) (string, error) {
+func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (string, error) {
 	// Try access_token first
 	if accessToken, err := r.Cookie("access_token"); err == nil {
-		if claims, err := j.ParseJWT(accessToken.Value, "access"); err == nil {
+		if claims, err := m.ParseJWT(accessToken.Value, "access"); err == nil {
 			if userId, ok := claims["user_id"].(string); ok {
 				return userId, nil
 			}
@@ -98,7 +98,7 @@ func (j *JWT) verifyToken(w http.ResponseWriter, r *http.Request) (string, error
 		return "", err
 	}
 
-	claims, err := j.ParseJWT(refreshToken.Value, "refresh")
+	claims, err := m.ParseJWT(refreshToken.Value, "refresh")
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -131,10 +131,10 @@ func (j *JWT) verifyToken(w http.ResponseWriter, r *http.Request) (string, error
 }
 
 // isUserExists checks if the user exists in the database.
-func (j *JWT) isUserExists(userId string) bool {
+func (m *JWTMiddleware) isUserExists(userId string) bool {
 	query := `SELECT 1 FROM user_credentials WHERE user_id = $1`
 	var exists int
-	err := j.db.QueryRow(query, userId).Scan(&exists)
+	err := m.DB.QueryRow(query, userId).Scan(&exists)
 	return err == nil
 }
 

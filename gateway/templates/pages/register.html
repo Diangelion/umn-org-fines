@@ -10,12 +10,11 @@
     <form
       id="register-form"
       class="space-y-4"
-      hx-post="http://127.0.0.1:3334/auth/register"
-      hx-target="#register-container"
+      hx-post="{{ .BaseURL }}/auth/register"
       hx-trigger="submit"
+      hx-target="#register-container"
       hx-swap="beforeend"
       hx-on::after-request="this.reset()"
-      hx-on::error="errorRegister(event)"
     >
       <!-- Name -->
       <input
@@ -51,7 +50,7 @@
           class="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
           pattern=".{8,}"
           title="Password must be at least 8 characters"
-          hx-on:input="triggerTogglePassword(this.value, 'toggle-password')"
+          oninput="triggerTogglePassword(this.value, 'toggle-password')"
         />
 
         <img
@@ -62,17 +61,18 @@
         />
       </div>
 
-      <!-- Confirm Password (don't add "name" attribute so it won't be included in form submission) -->
+      <!-- Confirm Password -->
       <div class="relative">
         <input
           id="register-confirm-password"
           type="password"
+          name="confirm_password"
           placeholder="Confirm Password"
           required
           class="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-gray-400 focus:outline-none"
           pattern=".{8,}"
           title="Confirm password must be at least 8 characters"
-          hx-on:input="triggerTogglePassword(this.value, 'toggle-confirm-password')"
+          oninput="triggerTogglePassword(this.value, 'toggle-confirm-password')"
         />
 
         <img
@@ -87,7 +87,7 @@
       <button
         type="button"
         class="w-full cursor-pointer rounded bg-gray-700 py-2 text-lg font-semibold text-neutral-100 transition hover:opacity-85"
-        hx-on:click="matchPasswordAndConfirmationPassword()"
+        onclick="matchPasswordAndConfirmationPassword()"
       >
         Sign Up
       </button>
@@ -96,17 +96,12 @@
     <hr class="my-6" />
     <div class="text-center">
       <a
-        href="#"
-        hx-get="/pages/login.html"
-        hx-target="main"
-        hx-swap="innerHTML"
-        hx-push-url="/login"
-        hx-replace-url="true"
+        href="/login"
+        hx-push-url="true"
         class="cursor-pointer font-semibold text-gray-700 hover:underline"
-        >Already have an account?</a
       >
+        Already have an account?
+      </a>
     </div>
   </div>
-
-  <div id="register-error-container"></div>
 </div>

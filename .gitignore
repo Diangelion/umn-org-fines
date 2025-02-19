@@ -29,6 +29,10 @@ gateway/go.work
 gateway/go.work.sum
 # env file
 gateway/.env
+# Prettier development 
+gateway/*.json
+gateway/*.yml
+gateway/node_modules
 
 # ======================================================
 

@@ -22,14 +22,14 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 
     // Assign request body to user for validation
     if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-        log.Println(err)
+        log.Println("Register | Decode request error: ", err)
         utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload", nil)
         return
     }
 
     // Perform registration
     if err := h.service.RegisterUser(user); err != nil {
-        log.Println(err)
+        log.Println("Register | Registration service error: ", err)
 
         // Handle duplicate email specifically, differentiate with response status code
         var dupErr *models.DuplicateEmailError

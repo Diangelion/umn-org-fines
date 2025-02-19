@@ -27,28 +27,10 @@ function togglePassword(inputId, toggleIcon) {
 }
 
 function matchPasswordAndConfirmationPassword() {
-  // Get the needed tag
-  const password = document.getElementById("register-password").value;
-  const confirmPassword = document.getElementById(
-    "register-confirm-password",
-  ).value;
-
-  // Validation check
-  if (password !== confirmPassword) {
-  }
-
-  ["toggle-password", "toggle-confirm-password"].forEach(
-    (toggleId) => triggerTogglePassword("", toggleId),
-    // togglePassword(
-    //   toggleId.replace("toggle", "register"),
-    //   document.getElementById(toggleId),
-    // ),
+  ["toggle-password", "toggle-confirm-password"].forEach((toggleId) =>
+    triggerTogglePassword("", toggleId),
   );
+
   // Submit form to trigger hx-post
   document.getElementById("register-form").requestSubmit();
-}
-
-function errorRegister(event) {
-  const response = event.detail?.errorInfo?.xhr?.response;
-  document.getElementById("register-error-container").outerHTML = response;
 }

@@ -19,28 +19,31 @@ func main() {
 	// Connect to the database
 	db, err := sql.Open("postgres", cfg.GetConnectionString())
 	if err != nil {
-		log.Println(err)
+		log.Println("Main | Connect to databaser error: ", err)
 		return
 	}
 
 	// Verify database connection
 	if err := db.Ping(); err != nil {
-		log.Println(err)
+		log.Println("Main | Pinging databaser error: ", err)
 		return
 	}
 	
 	router := mux.NewRouter().StrictSlash(false)
 	
 	// Page Routes
-	router.HandleFunc("/", handlers.IndexPage).Methods("GET")
-	router.NotFoundHandler = http.HandlerFunc(handlers.NotFound)
+	pagesHandler := handlers.NewPagesHandler(cfg)
+	router.HandleFunc("/", pagesHandler.IndexPage).Methods("GET")
+	router.HandleFunc("/register", pagesHandler.RegisterPage).Methods("GET")
+	router.HandleFunc("/login", pagesHandler.LoginPage).Methods("GET")
+	router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFound)
 
 	// Auth Routes
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
 	authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
 	
-	newJWT := middleware.NewJWT(db)
+	newJWT := middleware.NewJWT(db, cfg)
 	protectedAuthRouter := authRouter.NewRoute().Subrouter()
 	protectedAuthRouter.Use(newJWT.JWTMiddleware)
 	protectedAuthRouter.HandleFunc("/is-logged-in", handlers.IsLoggedIn).Methods("GET")

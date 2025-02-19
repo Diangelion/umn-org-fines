@@ -15,7 +15,7 @@
     <p class="mb-6 text-center">Log in to your account</p>
     <form
       id="login-form"
-      hx-post="http://127.0.0.1:3334/auth/login"
+      hx-post="{{ .BaseURL }}/auth/login"
       hx-trigger="submit"
     >
       <div class="mb-4">
@@ -59,14 +59,12 @@
     <div class="mt-6 text-center">
       <p>Don't have an account?</p>
       <a
-        href="#"
-        hx-get="/pages/register.html"
-        hx-target="main"
-        hx-swap="innerHTML"
-        hx-push-url="/register"
+        href="/register"
+        hx-push-url="true"
         class="font-semibold text-gray-600 hover:underline"
-        >Sign Up</a
       >
+        Sign Up
+      </a>
     </div>
   </div>
 </div>

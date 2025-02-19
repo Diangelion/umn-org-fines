@@ -10,13 +10,14 @@ import (
 
 // Config struct holds all the environment variables
 type Config struct {
-	HTTPPort   string
+	HTTPPort string
+	BaseURL string
 	BackendURL string
-	DBHost     string
-	DBUser     string
+	DBHost string
+	DBUser string
 	DBPassword string
-	DBName     string
-	DBPort     string
+	DBName string
+	DBPort string
 	JWTAccessKey string
 	JWTRefreshKey string
 }
@@ -29,13 +30,14 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
-		HTTPPort:   os.Getenv("PORT"),
-		BackendURL:   os.Getenv("BACKEND_URL"),
-		DBHost:     os.Getenv("DB_HOST"),
-		DBUser:     os.Getenv("DB_USER"),
+		HTTPPort: os.Getenv("PORT"),
+		BaseURL: os.Getenv("BASE_URL"),
+		BackendURL: os.Getenv("BACKEND_URL"),
+		DBHost: os.Getenv("DB_HOST"),
+		DBUser: os.Getenv("DB_USER"),
 		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBName:     os.Getenv("DB_NAME"),
-		DBPort:     os.Getenv("DB_PORT"),
+		DBName: os.Getenv("DB_NAME"),
+		DBPort: os.Getenv("DB_PORT"),
 		JWTAccessKey: os.Getenv("JWT_ACCESS_KEY"),
 		JWTRefreshKey: os.Getenv("JWT_REFRESH_KEY"),
 	}

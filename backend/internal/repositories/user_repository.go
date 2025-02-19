@@ -22,7 +22,7 @@ func (r *UserRepository) SaveCredential(userID string, user *models.UserRegistra
     // Insert user into the database
     query := "INSERT INTO user_credentials (user_id, password) VALUES ($1, $2)"
     if err := r.db.QueryRow(query, userID, user.Password); err != nil {
-        log.Print(err)
+        log.Println("SaveCredential | Insert user credentials error: ", err)
         return errors.New("Unable to create credentials")
     }
     return nil
@@ -40,7 +40,7 @@ func (r *UserRepository) CreateUser(user *models.UserRegistration) error {
 				return &models.DuplicateEmailError{Email: user.Email}
 			}
 		}
-        log.Println(err)
+        log.Println("CreateUser | Insert users error: ", err)
         return errors.New("Unable to create user")
     }
     return r.SaveCredential(userId, user)

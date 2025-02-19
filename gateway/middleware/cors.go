@@ -9,7 +9,10 @@ func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, hx-trigger, hx-request, hx-target, hx-current-url")
+		w.Header().Set(
+			"Access-Control-Allow-Headers", 
+			"Content-Type, Authorization, hx-request, hx-current-url, hx-trigger, hx-target, hx-swap",
+		)
 
 		// If it's a preflight OPTIONS request, respond with OK directly.
 		if r.Method == http.MethodOptions {
