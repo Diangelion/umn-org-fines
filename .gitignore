@@ -1,7 +1,7 @@
 # HTMX Frontend
 # Package
 frontend/node_modules
-frontend/package.json
+frontend/*.json
 # Tailwind CLI output css file
 frontend/styles/tailwind
 # env file
