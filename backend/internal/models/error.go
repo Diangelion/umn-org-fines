@@ -5,5 +5,5 @@ type DuplicateEmailError struct {
 }
 
 func (email *DuplicateEmailError) Error() string {
-	return "Email already exists"
+	return "Email already exists."
 }

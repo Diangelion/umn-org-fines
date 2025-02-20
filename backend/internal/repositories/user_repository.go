@@ -21,9 +21,9 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 func (r *UserRepository) SaveCredential(userID string, user *models.UserRegistration) error {
     // Insert user into the database
     query := "INSERT INTO user_credentials (user_id, password) VALUES ($1, $2)"
-    if err := r.db.QueryRow(query, userID, user.Password); err != nil {
+    if _, err := r.db.Exec(query, userID, user.Password); err != nil {
         log.Println("SaveCredential | Insert user credentials error: ", err)
-        return errors.New("Unable to create credentials")
+        return errors.New("Unable to create credentials.")
     }
     return nil
 }
@@ -41,7 +41,7 @@ func (r *UserRepository) CreateUser(user *models.UserRegistration) error {
 			}
 		}
         log.Println("CreateUser | Insert users error: ", err)
-        return errors.New("Unable to create user")
+        return errors.New("Unable to create user.")
     }
     return r.SaveCredential(userId, user)
 }

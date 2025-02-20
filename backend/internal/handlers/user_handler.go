@@ -23,7 +23,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
     // Assign request body to user for validation
     if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
         log.Println("Register | Decode request error: ", err)
-        utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload", nil)
+        utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload.", nil)
         return
     }
 
@@ -38,7 +38,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    utils.SendJSONResponse(w, http.StatusCreated, "User created", user)
+    utils.SendJSONResponse(w, http.StatusCreated, "Your account has been successfully created.", user)
 }
 
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {

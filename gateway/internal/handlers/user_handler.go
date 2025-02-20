@@ -35,7 +35,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate if required fields exist
-	if user.Name == "" || user.Email == "" || user.Password == "" {
+	if user.Name == "" || user.Email == "" || user.Password == "" || user.ConfirmPassword == "" {
 		log.Printf("Missing required field(s)")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
@@ -49,9 +49,16 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
 	}
+
+	// Create new User struct without confirm password
+	forwardUser := models.ForwardUserRegistration{
+		Name: user.Name,
+		Email: user.Email,
+		Password: user.Password,
+	}
 	
 	// Forward registration request to the backend service
-	response, err := services.ForwardUserRegistration(user)
+	response, err := services.ForwardUserRegistration(forwardUser)
 	if err != nil { // This error means the request **did not reach** the backend (e.g., network failure)
 		log.Println("RegisterUser | Forward registration error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
@@ -69,12 +76,16 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
+		msg := jsonResponse.Message
 		log.Print("RegisterUser | Response not ok: ", jsonResponse.Message)
-		utils.SendAlert(w, "Failed", utils.GetGeneralErrorMessage(), fileName)
+		if response.StatusCode != 409 { // If not conflict
+			msg = utils.GetGeneralErrorMessage()
+		}
+		utils.SendAlert(w, "Failed", msg, fileName)
 		return
 	} 
-		
-	utils.SendAlert(w, "Success", jsonResponse.Message, fileName)
+	
+	w.WriteHeader(http.StatusAccepted)
 }
 	
 	
@@ -163,9 +174,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
         Expires:  time.Now().Add(1 * 24 * time.Hour), // same as refresh token expiry
     })
 	
-	w.Header().Set("HX-Target", "main")
-	w.Header().Set("HX-Swap", "innerHTML")
-	w.Header().Add("Access-Control-Expose-Headers", "HX")
+	w.Header().Set("Hx-Target", "main")
+	w.Header().Set("Hx-Swap", "innerHTML")
 	w.WriteHeader(http.StatusOK)
 }
 

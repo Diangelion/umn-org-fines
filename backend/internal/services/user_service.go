@@ -21,7 +21,7 @@ func (s *UserService) RegisterUser(user *models.UserRegistration) error {
     hashedPassword, err := utils.HashPassword(user.Password)
     if err != nil {
         log.Println("RegisterUser | Hash password error: ", err)
-        return errors.New("Failed to hash password")
+        return errors.New("Failed to hash password.")
     }
     user.Password = hashedPassword // Store in user model
     

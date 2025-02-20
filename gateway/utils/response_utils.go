@@ -19,7 +19,7 @@ func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName 
 
 	// Set status code BEFORE writing content
 	// Set always 200 to make hx-swap, hx-target, etc. running
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusAccepted)
 
 	// Execute the template, writing the output to the ResponseWriter.
 	if err := tmpl.Execute(w, data); err != nil {

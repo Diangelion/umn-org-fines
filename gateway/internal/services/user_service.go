@@ -13,7 +13,7 @@ import (
 
 var cfg = config.LoadConfig()
 
-func ForwardUserRegistration(user models.UserRegistration) (*http.Response, error) {
+func ForwardUserRegistration(user models.ForwardUserRegistration) (*http.Response, error) {
 	jsonData, err := json.Marshal(user)
 	if err != nil {
 		log.Println("ForwardUserRegistration | Marshal error: ", err)

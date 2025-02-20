@@ -6,6 +6,8 @@ frontend/package.json
 frontend/styles/tailwind
 # env file
 frontend/.env
+# Prettier plugin
+frontend/*.yml
 
 # ======================================================
 
