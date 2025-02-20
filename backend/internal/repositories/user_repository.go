@@ -59,14 +59,14 @@ func (r *UserRepository) CheckCredential(user *models.UserLogin) (string, error)
     `
     if err := r.db.QueryRow(query, user.Email).Scan(&userId, &hashedPassword); err != nil {
         if err == sql.ErrNoRows {
-            return "", errors.New("Invalid credentials")
+            return "", errors.New("Invalid email and/or password.")
         }
         log.Println(err)
         return "", errors.New("unable to process the request")
     }
 
     if isValidPassword := utils.CheckPasswordHash(user.Password, hashedPassword); !isValidPassword {
-        return "", errors.New("Invalid credentials")
+        return "", errors.New("Invalid email and/or password.")
     }
 
     return userId, nil

@@ -17,33 +17,52 @@
       id="login-form"
       hx-post="{{ .BaseURL }}/auth/login"
       hx-trigger="submit"
+      hx-target="#login-container"
+      hx-swap="beforeend"
     >
       <div class="mb-4">
         <label class="mb-2 block text-sm font-semibold" for="email"
           >Email</label
         >
         <input
-          type="text"
           id="email"
+          type="email"
           name="email"
           placeholder="Enter your email"
           required
           class="w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          title="Please enter a valid email address (e.g., user@example.com)"
+          autocomplete="on"
         />
       </div>
+
+      <!-- Password -->
       <div class="mb-6">
         <label class="mb-2 block text-sm font-semibold" for="password"
           >Password</label
         >
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Enter your password"
-          required
-          class="w-full rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        />
+        <div class="relative">
+          <input
+            id="register-password"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            pattern=".{8,}"
+            title="Password must be at least 8 characters"
+            oninput="triggerTogglePassword(this.value, 'toggle-password')"
+          />
+
+          <img
+            id="toggle-password"
+            src="../icons/eye_closed.svg"
+            class="absolute right-4 top-[50%] hidden -translate-y-1/2 transform cursor-pointer"
+            onclick="togglePassword('register-password', this)"
+          />
+        </div>
       </div>
+
       <button
         type="submit"
         class="w-full cursor-pointer rounded-lg bg-gray-700 py-2 font-semibold text-neutral-100 transition duration-200 hover:opacity-85"

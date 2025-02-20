@@ -26,14 +26,10 @@ function togglePassword(inputId, toggleIcon) {
   );
 }
 
-function matchPasswordAndConfirmationPassword() {
-  // Submit form to trigger hx-post
-  document.getElementById("register-form").requestSubmit();
-}
-
-function resetForm() {
+// Custom events
+document.addEventListener("resetForm", () => {
   ["toggle-password", "toggle-confirm-password"].forEach((toggleId) =>
     triggerTogglePassword("", toggleId),
   );
   document.getElementById("register-form").reset();
-}
+});

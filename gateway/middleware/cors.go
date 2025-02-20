@@ -13,7 +13,8 @@ func CORS(next http.Handler) http.Handler {
 			"Access-Control-Allow-Headers", 
 			"Content-Type, Authorization, HX-Request, HX-Current-Url, HX-Trigger, HX-Target",
 		)
-		w.Header().Set("Access-Control-Expose-Headers", "HX-Redirect, HX-Reswap, HX-Retarget") // ✅ Allow frontend to read it
+		// ✅ Allow frontend to read custom header to enable HTMX events
+		w.Header().Set("Access-Control-Expose-Headers", "HX-Redirect, HX-Reswap, HX-Retarget, HX-Trigger") 
 		w.Header().Set("Content-Type", "text/html")
 
 		// If it's a preflight OPTIONS request, respond with OK directly.

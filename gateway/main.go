@@ -36,6 +36,7 @@ func main() {
 	router.HandleFunc("/", pagesHandler.IndexPage).Methods("GET")
 	router.HandleFunc("/register", pagesHandler.RegisterPage).Methods("GET")
 	router.HandleFunc("/login", pagesHandler.LoginPage).Methods("GET")
+	router.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFound)
 
 	// Auth Routes

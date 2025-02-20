@@ -64,7 +64,7 @@ func (m *JWTMiddleware) JWTMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		userId, err := m.verifyToken(w, r)
 		if err != nil {
-			log.Println(err)
+			log.Println("JWTMiddleware | Verify token error: ", err)
 			w.Header().Set("HX-Redirect", "/login")
 			w.WriteHeader(http.StatusNoContent)
 			return
@@ -94,25 +94,26 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 	// If access_token is invalid, check refresh_token
 	refreshToken, err := r.Cookie("refresh_token")
 	if err != nil {
+		log.Println("verifyToken | Cookie error: ", err)
 		return "", err
 	}
 
 	claims, err := m.ParseJWT(refreshToken.Value, "refresh")
 	if err != nil {
-		log.Println(err)
+		log.Println("verifyToken | Parse JWT error: ", err)
 		return "", err
 	}
-
+	
 	userId, ok := claims["user_id"].(string)
 	if !ok {
-		log.Printf("Invalid token claims")
+		log.Printf("verifyToken | Invalid token claims")
 		return "", errors.New("Invalid token claims")
 	}
-
+	
 	// Generate a new access token
 	newAccessToken, err := utils.GenerateAccessToken(userId)
 	if err != nil {
-		log.Println(err)
+		log.Println("verifyToken | Generate access token error: ", err)
 		return "", errors.New("Unable to generate access token")
 	}
 

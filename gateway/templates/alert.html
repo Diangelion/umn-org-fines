@@ -3,14 +3,12 @@
   id="alert-message"
   class="absolute left-[0] top-[0] flex h-screen w-screen items-center justify-center overflow-hidden bg-[rgb(0,0,0)]/25"
 >
-  <div
-    class="h-[30vh] w-[60vw] rounded-2xl bg-neutral-100 p-5 sm:w-[50vw] md:w-[30vw]"
-  >
+  <div class="w-[80vw] rounded-2xl bg-neutral-100 p-5 sm:w-[50vw] md:w-[30vw]">
     <div class="box-border flex h-full w-full flex-col">
-      <div class="mb-[auto]">
+      <div class="mb-[auto] h-fit">
         <h2 class="text-center font-bold text-gray-700">{{ .Title }}</h2>
         <hr class="my-2" />
-        <p>{{ .Message }}</p>
+        <p>{{ .Message}}</p>
       </div>
       <div class="flex w-full justify-end">
         <button

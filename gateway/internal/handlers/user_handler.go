@@ -74,9 +74,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
+	msg := jsonResponse.Message
+
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
-		msg := jsonResponse.Message
 		log.Print("RegisterUser | Response not ok: ", jsonResponse.Message)
 		if response.StatusCode != 409 { // If not conflict
 			msg = utils.GetGeneralErrorMessage()
@@ -85,10 +86,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	} 
 	
-	w.Header().Set("HX-Redirect", "/login")
-	w.Header().Set("HX-Push-Url", "/login")
-	w.Header().Set("HX-Location", "/login")
-	w.WriteHeader(http.StatusOK)
+	w.Header().Set("HX-Trigger", "resetForm")
+	utils.SendAlert(w, "Success", "Your account has been successfully created.", fileName)
 }
 	
 	
@@ -177,13 +176,12 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
         Expires:  time.Now().Add(1 * 24 * time.Hour), // same as refresh token expiry
     })
 	
-	w.Header().Set("HX-Target", "main")
-	w.Header().Set("HX-Swap", "innerHTML")
-	w.WriteHeader(http.StatusOK)
+	w.Header().Set("HX-Redirect", "/home")
+	w.WriteHeader(http.StatusAccepted)
 }
 
 
 func IsLoggedIn(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, "<div></div>")
+	w.Header().Set("HX-Redirect", "/home")
+	w.WriteHeader(http.StatusAccepted)
 }
