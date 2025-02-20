@@ -1,7 +1,15 @@
+htmx.config.selfRequestsOnly = false;
+
+const mainElement = document.querySelector("main");
 const baseURL = "http://localhost:3334";
-const mainElement = document.getElementsByTagName("main")?.[0];
+const path = window.location.pathname;
 
 if (mainElement) {
-  const path = window.location.pathname;
-  htmx.ajax("GET", `${baseURL}${path}`, { target: "main", swap: "innerHTML" });
+  mainElement.setAttribute("hx-get", `${baseURL}${path}`);
+  mainElement.setAttribute("hx-trigger", "load");
+  mainElement.setAttribute("hx-swap", "innerHTML");
+  mainElement.setAttribute("hx-target", "main");
+  htmx.process(mainElement);
+} else {
+  console.error("No main element found!");
 }

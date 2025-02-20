@@ -85,7 +85,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	} 
 	
-	w.WriteHeader(http.StatusAccepted)
+	w.Header().Set("HX-Redirect", "/login")
+	w.Header().Set("HX-Push-Url", "/login")
+	w.Header().Set("HX-Location", "/login")
+	w.WriteHeader(http.StatusOK)
 }
 	
 	
@@ -174,8 +177,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
         Expires:  time.Now().Add(1 * 24 * time.Hour), // same as refresh token expiry
     })
 	
-	w.Header().Set("Hx-Target", "main")
-	w.Header().Set("Hx-Swap", "innerHTML")
+	w.Header().Set("HX-Target", "main")
+	w.Header().Set("HX-Swap", "innerHTML")
 	w.WriteHeader(http.StatusOK)
 }
 

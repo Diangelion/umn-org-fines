@@ -11,8 +11,9 @@ func CORS(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
 		w.Header().Set(
 			"Access-Control-Allow-Headers", 
-			"Content-Type, Authorization, hx-request, hx-current-url, hx-trigger, hx-target",
+			"Content-Type, Authorization, HX-Request, HX-Current-Url, HX-Trigger, HX-Target",
 		)
+		w.Header().Set("Access-Control-Expose-Headers", "HX-Redirect, HX-Reswap, HX-Retarget") // ✅ Allow frontend to read it
 		w.Header().Set("Content-Type", "text/html")
 
 		// If it's a preflight OPTIONS request, respond with OK directly.

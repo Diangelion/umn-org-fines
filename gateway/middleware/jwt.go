@@ -65,9 +65,8 @@ func (m *JWTMiddleware) JWTMiddleware(next http.Handler) http.Handler {
 		userId, err := m.verifyToken(w, r)
 		if err != nil {
 			log.Println(err)
-			w.Header().Set("Hx-Reswap", "main")
-			w.Header().Set("Hx-Retarget", "innerHTML")
-			utils.SendAuthPage(w, m.Config.BaseURL, "pages/login.html")
+			w.Header().Set("HX-Redirect", "/login")
+			w.WriteHeader(http.StatusNoContent)
 			return
 		}
 

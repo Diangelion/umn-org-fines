@@ -3,13 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
     <title>ForFe</title>
     <link rel="icon" type="image/svg" href="icons/favicon.svg" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script
+      src="https://unpkg.com/htmx.org@2.0.4"
+      integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <main class="box-border h-screen w-screen bg-gray-300 p-5"></main>
-    <script src="scripts/index.js"></script>
     <script src="scripts/routing.js"></script>
     <script src="scripts/scripts.js"></script>
     <script src="scripts/accordion.js"></script>
