@@ -1,3 +1,5 @@
+// Handle Login and Register page
+
 function triggerTogglePassword(inputValue, toggleId) {
   // Check whether password value in input column exist or not
   if (inputValue) {
@@ -32,4 +34,25 @@ document.addEventListener("resetForm", () => {
     triggerTogglePassword("", toggleId),
   );
   document.getElementById("register-form").reset();
+});
+
+document.addEventListener("receiveJWT", (e) => {
+  console.log(e);
+  window.location.href = "/home";
+  // const xhr = e.detail.xhr;
+  // const newAccessToken = xhr.getResponseHeader("Authorization");
+  // if (newAccessToken) {
+  //   console.log("✅ New Access Token Received:", newAccessToken);
+  //   localStorage.setItem("accessToken", newAccessToken); // ✅ Store new token
+  // }
+});
+
+document.addEventListener("refreshAccessToken", (e) => {
+  console.log(e);
+  // const xhr = e.detail.xhr;
+  // const newAccessToken = xhr.getResponseHeader("Authorization");
+  // if (newAccessToken) {
+  //   console.log("✅ New Access Token Received:", newAccessToken);
+  //   localStorage.setItem("accessToken", newAccessToken); // ✅ Store new token
+  // }
 });

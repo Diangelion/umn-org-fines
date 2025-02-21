@@ -156,28 +156,10 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
-
-	// // Set the tokens as HTTP-only cookies
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:     "access_token",
-	// 	Value:    accessToken,
-	// 	HttpOnly: true,
-	// 	Path:     "/",
-	// 	Expires:  time.Now().Add(15 * time.Minute),
-	// 	Secure:   true,
-	// 	SameSite: http.SameSiteNoneMode,
-	// })
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:     "refresh_token",
-	// 	Value:    refreshToken,
-	// 	HttpOnly: true,
-	// 	Path:     "/",
-	// 	Expires:  time.Now().Add(24 * time.Hour),
-	// 	Secure:   true, 
-	// 	SameSite: http.SameSiteNoneMode,
-	// })
 	
-	w.Header().Set("HX-Redirect", "/home")
+	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
+	w.Header().Set("HX-Trigger", "receiveAccess, receiveRefresh")
 	w.WriteHeader(http.StatusAccepted)
 }
 

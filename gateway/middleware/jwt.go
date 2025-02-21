@@ -43,7 +43,7 @@ func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapCl
 		return m.getJWTKey(tokenType), nil
 	})
 
-	// Error handling if error occured / invalid parsed token
+	// Error handling if error occured / invalid parsed token / token expired
 	if err != nil || !parsedToken.Valid {
 		log.Println(err.Error())
 		return nil, errors.New("JWT is expired or invalid")
@@ -116,15 +116,8 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 		return "", errors.New("Unable to generate access token")
 	}
 
-	// // Set new access_token in cookies
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:     "access_token",
-	// 	Value:    newAccessToken,
-	// 	HttpOnly: true,
-	// 	Secure:   false, // Change to true if using HTTPS
-	// 	Path:     "/",
-	// 	Expires:  time.Now().Add(15 * time.Minute),
-	// })
+	w.Header().Set("Authorization", newAccessToken)
+	w.Header().Set("HX-Trigger", "refreshAccessToken()")
 
 	return userId, nil
 }
