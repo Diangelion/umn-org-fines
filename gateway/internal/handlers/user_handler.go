@@ -7,7 +7,6 @@ import (
 	"gateway/internal/services"
 	"log"
 	"net/http"
-	"time"
 
 	"gateway/utils"
 )
@@ -158,23 +157,25 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Set the tokens as HTTP-only cookies
-    http.SetCookie(w, &http.Cookie{
-        Name:     "access_token",
-        Value:    accessToken,
-        HttpOnly: true,
-        Secure:   false, // set to true if using HTTPS
-        Path:     "/",
-        Expires:  time.Now().Add(15 * time.Minute), // same as access token expiry
-    })
-    http.SetCookie(w, &http.Cookie{
-        Name:     "refresh_token",
-        Value:    refreshToken,
-        HttpOnly: true,
-        Secure:   false, // set to true if using HTTPS
-        Path:     "/",
-        Expires:  time.Now().Add(1 * 24 * time.Hour), // same as refresh token expiry
-    })
+	// // Set the tokens as HTTP-only cookies
+	// http.SetCookie(w, &http.Cookie{
+	// 	Name:     "access_token",
+	// 	Value:    accessToken,
+	// 	HttpOnly: true,
+	// 	Path:     "/",
+	// 	Expires:  time.Now().Add(15 * time.Minute),
+	// 	Secure:   true,
+	// 	SameSite: http.SameSiteNoneMode,
+	// })
+	// http.SetCookie(w, &http.Cookie{
+	// 	Name:     "refresh_token",
+	// 	Value:    refreshToken,
+	// 	HttpOnly: true,
+	// 	Path:     "/",
+	// 	Expires:  time.Now().Add(24 * time.Hour),
+	// 	Secure:   true, 
+	// 	SameSite: http.SameSiteNoneMode,
+	// })
 	
 	w.Header().Set("HX-Redirect", "/home")
 	w.WriteHeader(http.StatusAccepted)

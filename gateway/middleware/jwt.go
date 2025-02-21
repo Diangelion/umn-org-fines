@@ -8,7 +8,6 @@ import (
 	"gateway/utils"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -117,15 +116,15 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 		return "", errors.New("Unable to generate access token")
 	}
 
-	// Set new access_token in cookies
-	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
-		Value:    newAccessToken,
-		HttpOnly: true,
-		Secure:   false, // Change to true if using HTTPS
-		Path:     "/",
-		Expires:  time.Now().Add(15 * time.Minute),
-	})
+	// // Set new access_token in cookies
+	// http.SetCookie(w, &http.Cookie{
+	// 	Name:     "access_token",
+	// 	Value:    newAccessToken,
+	// 	HttpOnly: true,
+	// 	Secure:   false, // Change to true if using HTTPS
+	// 	Path:     "/",
+	// 	Expires:  time.Now().Add(15 * time.Minute),
+	// })
 
 	return userId, nil
 }

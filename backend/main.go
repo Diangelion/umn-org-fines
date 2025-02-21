@@ -49,7 +49,7 @@ func main() {
 	handlerWithCORS := middleware.CORS(router)
 
 	// Start the server
-	serverURL := fmt.Sprintf("http://localhost:%s", cfg.HTTPPort)
+	serverURL := fmt.Sprintf("http://127.0.0.1:%s", cfg.HTTPPort)
 	fmt.Println("Server running at:", serverURL)
 	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, handlerWithCORS))
 }

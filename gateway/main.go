@@ -30,21 +30,24 @@ func main() {
 	}
 	
 	router := mux.NewRouter().StrictSlash(false)
+	newJWT := middleware.NewJWT(db, cfg)
 	
 	// Page Routes
 	pagesHandler := handlers.NewPagesHandler(cfg)
 	router.HandleFunc("/", pagesHandler.IndexPage).Methods("GET")
 	router.HandleFunc("/register", pagesHandler.RegisterPage).Methods("GET")
 	router.HandleFunc("/login", pagesHandler.LoginPage).Methods("GET")
-	router.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFound)
+
+	protectedPagesRouter := router.NewRoute().Subrouter()
+	protectedPagesRouter.Use(newJWT.JWTMiddleware)
+	protectedPagesRouter.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
 
 	// Auth Routes
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
 	authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
 	
-	newJWT := middleware.NewJWT(db, cfg)
 	protectedAuthRouter := authRouter.NewRoute().Subrouter()
 	protectedAuthRouter.Use(newJWT.JWTMiddleware)
 	protectedAuthRouter.HandleFunc("/is-logged-in", handlers.IsLoggedIn).Methods("GET")
@@ -53,7 +56,7 @@ func main() {
 	handlerWithCORS := middleware.CORS(router)
 	
 	// Start the server
-	serverURL := fmt.Sprintf("http://localhost:%s", cfg.HTTPPort)
+	serverURL := fmt.Sprintf("http://127.0.0.1:%s", cfg.HTTPPort)
 	fmt.Println("Gateway running at", serverURL)
 	log.Fatal(http.ListenAndServe(":"+cfg.HTTPPort, handlerWithCORS))
 
