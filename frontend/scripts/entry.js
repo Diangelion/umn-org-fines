@@ -28,23 +28,32 @@ function togglePassword(inputId, toggleIcon) {
   );
 }
 
+// Handler function to receive JWT directly after log in
+function receiveJWT(e) {
+  const xhr = e?.detail?.xhr || {};
+  const accessToken = xhr?.getResponseHeader("Authorization") || "";
+  const refreshToken = xhr?.getResponseHeader("X-Refresh-Token") || "";
+
+  if (!accessToken || !refreshToken) return;
+
+  window.StorageModules.storeInLocalForage(
+    "access_token",
+    JSON.stringify(accessToken),
+  );
+  window.StorageModules.storeInLocalForage(
+    "refresh_token",
+    JSON.stringify(refreshToken),
+  );
+  document.getElementById("login-form").reset();
+  window.location.href = "/home";
+}
+
 // Custom events
 document.addEventListener("resetForm", () => {
   ["toggle-password", "toggle-confirm-password"].forEach((toggleId) =>
     triggerTogglePassword("", toggleId),
   );
   document.getElementById("register-form").reset();
-});
-
-document.addEventListener("receiveJWT", (e) => {
-  console.log(e);
-  window.location.href = "/home";
-  // const xhr = e.detail.xhr;
-  // const newAccessToken = xhr.getResponseHeader("Authorization");
-  // if (newAccessToken) {
-  //   console.log("✅ New Access Token Received:", newAccessToken);
-  //   localStorage.setItem("accessToken", newAccessToken); // ✅ Store new token
-  // }
 });
 
 document.addEventListener("refreshAccessToken", (e) => {

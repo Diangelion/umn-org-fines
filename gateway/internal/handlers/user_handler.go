@@ -159,7 +159,6 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	
 	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 	w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
-	w.Header().Set("HX-Trigger", "receiveAccess, receiveRefresh")
 	w.WriteHeader(http.StatusAccepted)
 }
 
