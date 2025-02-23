@@ -3,11 +3,11 @@ package middleware
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"gateway/config"
 	"gateway/utils"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -24,10 +24,18 @@ func NewJWT(db *sql.DB, cfg *config.Config) *JWTMiddleware {
 
 var cfg = config.LoadConfig()
 
-func (m *JWTMiddleware) getJWTKey(whichToken string) (interface{}) {
-	returnVal := cfg.JWTAccessKey
+// isUserExists checks if the user exists in the database.
+func (m *JWTMiddleware) isUserExists(userId string) bool {
+	query := `SELECT 1 FROM user_credentials WHERE user_id = $1`
+	var exists int
+	err := m.DB.QueryRow(query, userId).Scan(&exists)
+	return err == nil
+}
+
+func (m *JWTMiddleware) getJWTKey(whichToken string) []byte {
+	returnVal := []byte(cfg.JWTAccessKey)
 	if (whichToken == "refresh") {
-		returnVal = cfg.JWTRefreshKey
+		returnVal = []byte(cfg.JWTRefreshKey)
 	}
 	return returnVal
 }
@@ -37,7 +45,7 @@ func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapCl
 	parsedToken, err :=  jwt.Parse(tokenValue, func(t *jwt.Token) (interface{}, error) {
 		// Ensure the signing method is HMAC.
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			log.Println(fmt.Printf("Unexpected signing method: %v", t.Header["alg"]))
+			log.Printf("ParseJWT | Unexpected signing method: %v", t.Header["alg"])
 			return nil, errors.New("Invalid signing method")
 		}
 		return m.getJWTKey(tokenType), nil
@@ -45,64 +53,42 @@ func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapCl
 
 	// Error handling if error occured / invalid parsed token / token expired
 	if err != nil || !parsedToken.Valid {
-		log.Println(err.Error())
+		log.Println("ParseJWT | Parse token error: ", err)
 		return nil, errors.New("JWT is expired or invalid")
 	}
 	
 	// Extract claims from the token
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok {
+		log.Printf("ParseJWT | Invalid token claims\n")
 		return nil, errors.New("Invalid token claims")
 	}
 
 	return claims, nil
 }
 
-// JWTMiddleware verifies the JWT token in the Authorization header.
-func (m *JWTMiddleware) JWTMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		refreshToken := r.Header.Get("X-Refresh-Token")
-		log.Printf("Auth: %s, Refresh: %s", authHeader, refreshToken)
-		// userId, err := m.verifyToken(w, r)
-		// if err != nil {
-		// 	log.Println("JWTMiddleware | Verify token error: ", err)
-		// 	w.Header().Set("HX-Redirect", "/login")
-		// 	w.WriteHeader(http.StatusNoContent)
-		// 	return
-		// }
-
-		// // Validate user existence in DB
-		// if !m.isUserExists(userId) {
-		// 	utils.SendAlert(w, "Error", "Invalid user.", "alert.html")
-		// 	return
-		// }
-
-		next.ServeHTTP(w, r)
-	})
-}
-
 // verifyToken checks for access_token first, then refresh_token if access_token is invalid.
 func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (string, error) {
-	// Try access_token first
-	// accessToken := r.Header.Get("Authorization")
-	// log.Println(accessToken)
-	// if err == nil {
-	// 	if claims, err := m.ParseJWT(accessToken.Value, "access"); err == nil {
-	// 		if userId, ok := claims["user_id"].(string); ok {
-	// 			return userId, nil
-	// 		}
-	// 	}
-	// }
-
-	// If access_token is invalid, check refresh_token
-	refreshToken, err := r.Cookie("refresh_token")
-	if err != nil {
-		log.Println("verifyToken | Cookie error: ", err)
-		return "", err
+	// Get access token first first
+	accessToken := r.Header.Get("Authorization")
+	if accessToken != "" {
+		if parts := strings.Split(accessToken, " "); len(parts) == 2 && parts[0] == "Bearer" {
+			if claims, err := m.ParseJWT(parts[1], "access"); err == nil {
+				if userId, ok := claims["user_id"].(string); ok {
+					return userId, nil
+				}
+			}
+		}
 	}
 
-	claims, err := m.ParseJWT(refreshToken.Value, "refresh")
+	// If access token is invalid, check refresh token
+	refreshToken := r.Header.Get("X-Refresh-Token")
+	if refreshToken == "" {
+		log.Printf("verifyToken | Missing refresh token\n")
+		return "", errors.New("Missing refresh token")
+	}
+
+	claims, err := m.ParseJWT(refreshToken, "refresh")
 	if err != nil {
 		log.Println("verifyToken | Parse JWT error: ", err)
 		return "", err
@@ -110,7 +96,7 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 	
 	userId, ok := claims["user_id"].(string)
 	if !ok {
-		log.Printf("verifyToken | Invalid token claims")
+		log.Printf("verifyToken | Invalid token claims\n")
 		return "", errors.New("Invalid token claims")
 	}
 	
@@ -127,11 +113,40 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 	return userId, nil
 }
 
-// isUserExists checks if the user exists in the database.
-func (m *JWTMiddleware) isUserExists(userId string) bool {
-	query := `SELECT 1 FROM user_credentials WHERE user_id = $1`
-	var exists int
-	err := m.DB.QueryRow(query, userId).Scan(&exists)
-	return err == nil
+// JWTMiddleware verifies the JWT token in the Authorization header.
+func (m *JWTMiddleware) ProtectedMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userId, err := m.verifyToken(w, r)
+		if err != nil {
+			log.Println("ProtectedMiddleware | Verify token error: ", err)
+			w.Header().Set("HX-Redirect", "/login")
+			w.WriteHeader(http.StatusAccepted)
+			return
+		}
+
+		// Validate user existence in DB
+		if !m.isUserExists(userId) {
+			utils.SendAlert(w, "Error", "Invalid user.", "alert.html")
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
+
+// Redirect verifies the JWT token in the Authorization header.
+// If exist then redirect to homepage, otherwise proceed unauthorized page like login, register, etc.
+func (m *JWTMiddleware) PublicMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userId, err := m.verifyToken(w, r)
+		if err == nil && m.isUserExists(userId) {
+			log.Printf("PublicMiddleware | Session exist\n")
+			w.Header().Set("HX-Redirect", "/home")
+			w.WriteHeader(http.StatusAccepted)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

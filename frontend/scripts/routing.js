@@ -1,5 +1,4 @@
 htmx.config.selfRequestsOnly = false;
-// htmx.config.withCredentials = true;
 
 (async () => {
   const mainElement = document.querySelector("main");
@@ -11,10 +10,11 @@ htmx.config.selfRequestsOnly = false;
       window.AuthModules.getAccessToken(),
       window.AuthModules.getRefreshToken(),
     ]);
-    const headerSent = {
-      Authorization: accessToken,
-      "X-Refresh-Token": refreshToken,
-    };
+    const headerSent = Object.assign(
+      {},
+      accessToken ? { Authorization: accessToken } : {},
+      !accessToken && refreshToken ? { "X-Refresh-Token": refreshToken } : {},
+    );
     mainElement.setAttribute("hx-headers", JSON.stringify(headerSent));
     mainElement.setAttribute("hx-get", `${baseURL}${path}`);
     mainElement.setAttribute("hx-trigger", "load once from:body");

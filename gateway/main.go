@@ -30,28 +30,29 @@ func main() {
 	}
 	
 	router := mux.NewRouter().StrictSlash(false)
-	newJWT := middleware.NewJWT(db, cfg)
-	
-	// Page Routes
+	jwt := middleware.NewJWT(db, cfg)
 	pagesHandler := handlers.NewPagesHandler(cfg)
-	router.HandleFunc("/", pagesHandler.IndexPage).Methods("GET")
-	router.HandleFunc("/register", pagesHandler.RegisterPage).Methods("GET")
-	router.HandleFunc("/login", pagesHandler.LoginPage).Methods("GET")
-	router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFound)
 
-	protectedPagesRouter := router.NewRoute().Subrouter()
-	protectedPagesRouter.Use(newJWT.JWTMiddleware)
-	protectedPagesRouter.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
+    // 1. Auth API Routes (should come first as they're most specific)
+    authRouter := router.PathPrefix("/auth").Subrouter()
+    authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
+    authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
 
-	// Auth Routes
-	authRouter := router.PathPrefix("/auth").Subrouter()
-	authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
-	authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
-	
-	protectedAuthRouter := authRouter.NewRoute().Subrouter()
-	protectedAuthRouter.Use(newJWT.JWTMiddleware)
-	protectedAuthRouter.HandleFunc("/is-logged-in", handlers.IsLoggedIn).Methods("GET")
-	
+    // 2. Protected Routes (pages requiring authentication)
+    protectedRouter := router.NewRoute().Subrouter()
+    protectedRouter.Use(jwt.ProtectedMiddleware)
+    protectedRouter.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
+
+    // 3. Public Routes (with redirect middleware)
+    publicRouter := router.NewRoute().Subrouter()
+    publicRouter.Use(jwt.PublicMiddleware)
+    publicRouter.HandleFunc("/", pagesHandler.IndexPage).Methods("GET")
+    publicRouter.HandleFunc("/login", pagesHandler.LoginPage).Methods("GET")
+    publicRouter.HandleFunc("/register", pagesHandler.RegisterPage).Methods("GET")
+
+    // 4. Not Found Handler (should be on main router)
+    router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFound)
+
 	// Wrap all router with CORS middleware so that every request goes through it.
 	handlerWithCORS := middleware.CORS(router)
 	

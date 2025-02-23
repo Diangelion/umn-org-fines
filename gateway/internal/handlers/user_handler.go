@@ -35,7 +35,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Validate if required fields exist
 	if user.Name == "" || user.Email == "" || user.Password == "" || user.ConfirmPassword == "" {
-		log.Printf("Missing required field(s)")
+		log.Printf("Missing required field(s)\n")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
@@ -43,7 +43,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	
 	// Validate password & confirm password
 	if user.Password != user.ConfirmPassword {
-		log.Printf("Password & confirm password don't match")
+		log.Printf("Password & confirm password don't match\n")
 		msg := fmt.Sprintf("Password & confirm password don't match. %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
@@ -112,7 +112,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		
     // Validate if required fields exist
     if user.Email == "" || user.Password == "" {
-		log.Printf("Missing required field(s)")
+		log.Printf("Missing required field(s)\n")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
         utils.SendAlert(w, "Error", msg, fileName)
         return
@@ -159,11 +159,5 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	
 	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 	w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
-	w.WriteHeader(http.StatusAccepted)
-}
-
-
-func IsLoggedIn(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("HX-Redirect", "/home")
 	w.WriteHeader(http.StatusAccepted)
 }

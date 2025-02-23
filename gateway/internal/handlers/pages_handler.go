@@ -15,7 +15,8 @@ func NewPagesHandler(cfg *config.Config) *PagesHandler {
 }
 
 func (h *PagesHandler) IndexPage(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/auth/is-logged-in", http.StatusFound)
+	w.Header().Set("HX-Redirect", "/login")
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func (h *PagesHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {

@@ -29,21 +29,29 @@ function togglePassword(inputId, toggleIcon) {
 }
 
 // Handler function to receive JWT directly after log in
-function receiveJWT(e) {
+async function receiveJWT(e) {
+  // Get Authorization & X-Refresh-Token from response headers
   const xhr = e?.detail?.xhr || {};
   const accessToken = xhr?.getResponseHeader("Authorization") || "";
   const refreshToken = xhr?.getResponseHeader("X-Refresh-Token") || "";
 
   if (!accessToken || !refreshToken) return;
 
-  window.StorageModules.storeInLocalForage(
+  // Store in local forage
+  const ttl15Minutes = 15 * 60 * 1000; // ttl in ms
+  await window.StorageModules.storeWithExpiry(
     "access_token",
-    JSON.stringify(accessToken),
+    accessToken,
+    ttl15Minutes,
   );
-  window.StorageModules.storeInLocalForage(
+
+  const ttl7Days = 7 * 24 * 60 * 60 * 1000; // ttl in ms
+  await window.StorageModules.storeWithExpiry(
     "refresh_token",
-    JSON.stringify(refreshToken),
+    refreshToken,
+    ttl7Days,
   );
+
   document.getElementById("login-form").reset();
   window.location.href = "/home";
 }
