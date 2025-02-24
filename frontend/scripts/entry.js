@@ -28,12 +28,18 @@ function togglePassword(inputId, toggleIcon) {
   );
 }
 
-// Handler function to receive JWT directly after log in
-async function receiveJWT(e) {
-  // Get Authorization & X-Refresh-Token from response headers
-  const xhr = e?.detail?.xhr || {};
-  const accessToken = xhr?.getResponseHeader("Authorization") || "";
-  const refreshToken = xhr?.getResponseHeader("X-Refresh-Token") || "";
+// Custom events
+document.addEventListener("resetForm", () => {
+  ["toggle-password", "toggle-confirm-password"].forEach((toggleId) =>
+    triggerTogglePassword("", toggleId),
+  );
+  document.getElementById("register-form").reset();
+});
+
+document.addEventListener("receiveJWT", async (e) => {
+  // Get AccessToken and RefreshToken from hx-trigger in header response
+  const accessToken = e?.detail?.["AccessToken"] || "";
+  const refreshToken = e?.detail?.["RefreshToken"] || "";
 
   if (!accessToken || !refreshToken) return;
 
@@ -54,22 +60,19 @@ async function receiveJWT(e) {
 
   document.getElementById("login-form").reset();
   window.location.href = "/home";
-}
-
-// Custom events
-document.addEventListener("resetForm", () => {
-  ["toggle-password", "toggle-confirm-password"].forEach((toggleId) =>
-    triggerTogglePassword("", toggleId),
-  );
-  document.getElementById("register-form").reset();
 });
 
-document.addEventListener("refreshAccessToken", (e) => {
-  console.log(e);
-  // const xhr = e.detail.xhr;
-  // const newAccessToken = xhr.getResponseHeader("Authorization");
-  // if (newAccessToken) {
-  //   console.log("✅ New Access Token Received:", newAccessToken);
-  //   localStorage.setItem("accessToken", newAccessToken); // ✅ Store new token
-  // }
+document.addEventListener("renewAccessToken", async (e) => {
+  const newAccessToken = e?.detail?.value || "";
+  if (!newAccessToken) {
+    console.error("renewAccessToken | New access token is missing");
+    return;
+  }
+
+  const ttl15Minutes = 15 * 60 * 1000; // ttl in ms
+  await window.StorageModules.storeWithExpiry(
+    "access_token",
+    newAccessToken,
+    ttl15Minutes,
+  );
 });

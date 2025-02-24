@@ -24,7 +24,7 @@ func GenerateAccessToken(userId string) (string, error) {
 func GenerateRefreshToken(userId string) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": userId,
-		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+		"exp":     time.Now().Add(7 * 24 * time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// Convert c.JWTRefreshKey to []byte

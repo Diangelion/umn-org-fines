@@ -157,7 +157,19 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-	w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
+	// w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	// w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
+	authToken := models.AuthorizationToken{
+		AccessToken: fmt.Sprintf("Bearer %s", accessToken),
+		RefreshToken: fmt.Sprintf("Bearer %s", refreshToken),
+	}
+
+	jsonAuthToken, err := json.Marshal(authToken)
+	if err != nil {
+		log.Println("LoginUser | Marshal json auth token error: ", err)
+		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+	}
+	
+	w.Header().Set("HX-Trigger", fmt.Sprintf(`{"receiveJWT": %s}`, string(jsonAuthToken)))
 	w.WriteHeader(http.StatusAccepted)
 }

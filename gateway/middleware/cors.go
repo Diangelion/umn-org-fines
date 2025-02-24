@@ -20,7 +20,7 @@ func CORS(next http.Handler) http.Handler {
 		// ✅ Allow frontend to read custom header to enable HTMX events
 		w.Header().Set(
 			"Access-Control-Expose-Headers", 
-			"Authorization, X-Refresh-Token, HX-Redirect, HX-Reswap, HX-Retarget, HX-Trigger",
+			"HX-Redirect, HX-Reswap, HX-Retarget, HX-Trigger",
 		)
 
 		// If it's a preflight OPTIONS request, respond with OK directly.

@@ -3,6 +3,7 @@ package middleware
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"gateway/config"
 	"gateway/utils"
 	"log"
@@ -56,7 +57,7 @@ func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapCl
 		log.Println("ParseJWT | Parse token error: ", err)
 		return nil, errors.New("JWT is expired or invalid")
 	}
-	
+
 	// Extract claims from the token
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok {
@@ -88,18 +89,25 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 		return "", errors.New("Missing refresh token")
 	}
 
-	claims, err := m.ParseJWT(refreshToken, "refresh")
+	parts := strings.Split(refreshToken, " ")
+
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		log.Printf("verifyToken | Invalid refresh token\n")
+		return "", errors.New("Invalid sent refresh token")
+	}
+
+	claims, err := m.ParseJWT(parts[1], "refresh")
 	if err != nil {
 		log.Println("verifyToken | Parse JWT error: ", err)
 		return "", err
 	}
-	
+
 	userId, ok := claims["user_id"].(string)
 	if !ok {
 		log.Printf("verifyToken | Invalid token claims\n")
 		return "", errors.New("Invalid token claims")
 	}
-	
+
 	// Generate a new access token
 	newAccessToken, err := utils.GenerateAccessToken(userId)
 	if err != nil {
@@ -107,9 +115,7 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 		return "", errors.New("Unable to generate access token")
 	}
 
-	w.Header().Set("Authorization", newAccessToken)
-	w.Header().Set("HX-Trigger", "refreshAccessToken()")
-
+	w.Header().Set("HX-Trigger", fmt.Sprintf(`{"renewAccessToken": "Bearer %s"}`, newAccessToken))
 	return userId, nil
 }
 
