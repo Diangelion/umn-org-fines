@@ -45,3 +45,9 @@ ForFe is a website application that is used for Multimedia Nusantara University 
 2. Stackoverflow -> bug/problem fixing
 3. Github Discussion -> bug/problem fixing
 4. https://flowbite.com/icons/ -> as free icon provider
+
+## Color Palette
+
+1. gray-700 -> #364153
+2. gray-300 -> #d1d5dc
+3. neutral-100 -> #f5f5f5

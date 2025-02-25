@@ -14,13 +14,72 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   </head>
   <body>
-    <main class="box-border h-screen w-screen bg-gray-300 p-5"></main>
+    <main class="box-border h-screen w-screen bg-gray-300 p-5">
+      <div
+        id="profile-container"
+        class="flex h-full w-full flex-col justify-center"
+      >
+        <div class="h-fit w-full rounded-md bg-black md:pb-5">
+          <div
+            class="h-[12rem] w-full rounded-t-md bg-purple-700 md:h-[20rem]"
+          ></div>
+          <div class="mt-[-1.5rem] flex h-fit w-full gap-x-2 p-2 md:px-5">
+            <div
+              class="h-[6rem] w-[6rem] rounded-full bg-red-500 md:h-[10rem] md:w-[10rem]"
+            ></div>
+            <div
+              class="mr-auto flex w-fit flex-col gap-y-[0.2rem] self-end text-white"
+            >
+              <p class="ml-[0.2rem] bg-red-600 font-semibold md:text-2xl">
+                Bryan Richie
+              </p>
+              <p class="ml-[0.2rem] bg-purple-600 text-xs md:text-xl">
+                2 groups
+              </p>
+              <div class="relative z-[0] flex bg-green-600">
+                <div
+                  class="relative top-0 h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
+                ></div>
+                <div
+                  class="relative left-[-0.2rem] top-0 z-[-1] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
+                ></div>
+                <div
+                  class="relative left-[-0.4rem] top-0 z-[-2] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
+                ></div>
+                <div
+                  class="relative left-[-0.6rem] top-0 z-[-3] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
+                ></div>
+                <!-- <div
+                  class="relative left-[-20px] top-0 z-[-4] h-[1.5rem] w-[1.5rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)]"
+                ></div> -->
+                <div
+                  class="relative left-[-0.8rem] top-0 z-[-4] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
+                >
+                  <img
+                    src="./icons/3dots_horizontal.svg"
+                    class="translate-[-50%] absolute left-[50%] top-[50%]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="flex w-fit cursor-pointer gap-x-2 self-end rounded-lg bg-gray-700 px-3 py-2 font-semibold text-neutral-100 transition duration-200 hover:opacity-85"
+            >
+              <img src="./icons/user_edit.svg" />
+              Edit profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
     <!-- Modules -->
-    <script src="./scripts/modules/auth.js"></script>
-    <script src="./scripts/modules/storage.js"></script>
+    <!-- <script src="./scripts/modules/auth.js"></script>
+    <script src="./scripts/modules/storage.js"></script> -->
     <!-- Script -->
-    <script src="./scripts/routing.js"></script>
+    <!-- <script src="./scripts/routing.js"></script>
     <script src="./scripts/scripts.js"></script>
-    <script src="./scripts/entry.js"></script>
+    <script src="./scripts/entry.js"></script> -->
   </body>
 </html>
