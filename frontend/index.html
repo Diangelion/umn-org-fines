@@ -14,29 +14,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   </head>
   <body>
-    <main class="box-border h-screen w-screen bg-gray-300 p-5">
+    <main class="box-border min-h-screen w-screen bg-gray-300 p-5">
       <div
         id="profile-container"
-        class="flex h-full w-full flex-col justify-center"
+        class="flex h-fit w-full flex-col items-center justify-center gap-y-10"
       >
-        <div class="h-fit w-full rounded-md bg-black md:pb-5">
-          <div
-            class="h-[12rem] w-full rounded-t-md bg-purple-700 md:h-[20rem]"
-          ></div>
+        <div class="mx-auto h-fit w-3/4 rounded bg-neutral-100 md:pb-5">
+          <div class="aspect-video w-full rounded-t bg-gray-700"></div>
           <div class="mt-[-1.5rem] flex h-fit w-full gap-x-2 p-2 md:px-5">
             <div
-              class="h-[6rem] w-[6rem] rounded-full bg-red-500 md:h-[10rem] md:w-[10rem]"
+              class="h-[6rem] w-[6rem] rounded-full bg-gray-700 md:h-[10rem] md:w-[10rem]"
             ></div>
             <div
               class="mr-auto flex w-fit flex-col gap-y-[0.2rem] self-end text-white"
             >
-              <p class="ml-[0.2rem] bg-red-600 font-semibold md:text-2xl">
+              <p class="ml-[0.2rem] bg-gray-700 font-semibold md:text-2xl">
                 Bryan Richie
               </p>
-              <p class="ml-[0.2rem] bg-purple-600 text-xs md:text-xl">
-                2 groups
-              </p>
-              <div class="relative z-[0] flex bg-green-600">
+              <p class="ml-[0.2rem] bg-gray-700 text-xs md:text-xl">2 groups</p>
+              <div class="relative z-[0] flex bg-gray-700">
                 <div
                   class="relative top-0 h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
                 ></div>
@@ -49,9 +45,6 @@
                 <div
                   class="relative left-[-0.6rem] top-0 z-[-3] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
                 ></div>
-                <!-- <div
-                  class="relative left-[-20px] top-0 z-[-4] h-[1.5rem] w-[1.5rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)]"
-                ></div> -->
                 <div
                   class="relative left-[-0.8rem] top-0 z-[-4] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
                 >
@@ -66,11 +59,92 @@
             <button
               type="button"
               class="flex w-fit cursor-pointer gap-x-2 self-end rounded-lg bg-gray-700 px-3 py-2 font-semibold text-neutral-100 transition duration-200 hover:opacity-85"
+              onclick="triggerEditProfileForm()"
             >
               <img src="./icons/user_edit.svg" />
               Edit profile
             </button>
           </div>
+        </div>
+
+        <div
+          id="edit-profile-form"
+          class="mx-auto h-fit w-3/4 rounded bg-neutral-100 p-6 shadow-md"
+        >
+          <!-- Edit Profile Form -->
+          <form
+            id="register-form"
+            class="gap-y-5"
+            hx-post="{{ .BaseURL }}/auth/register"
+            hx-trigger="submit"
+            hx-target="#register-container"
+            hx-swap="beforeend"
+          >
+            <div>
+              <label>Cover Photo</label>
+              <div
+                class="border-3 mx-auto flex aspect-video h-fit w-1/2 flex-col items-center justify-center border-dashed border-gray-700 p-5"
+              >
+                <p>
+                  Upload a cover photo with a
+                  <strong>16:9 aspect ratio</strong>.
+                </p>
+                <p>Recommended size: <strong>1200x675 pixels</strong>.</p>
+              </div>
+            </div>
+
+            <div>
+              <label>Profile Photo</label>
+              <div
+                class="border-3 mx-auto flex aspect-video h-fit w-1/2 flex-col items-center justify-center border-dashed border-gray-700 p-5"
+              >
+                <p>
+                  Upload a cover photo with a
+                  <strong>16:9 aspect ratio</strong>.
+                </p>
+                <p>Recommended size: <strong>1200x675 pixels</strong>.</p>
+              </div>
+            </div>
+
+            <!-- Name -->
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              required
+              class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              pattern="^[a-zA-Z\s]+$"
+              title="Only letters and spaces allowed"
+              autocomplete="on"
+            />
+
+            <!-- Email -->
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+              class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              title="Please enter a valid email address (e.g., user@example.com)"
+              autocomplete="on"
+            />
+
+            <!-- Submit Button -->
+            <div class="flex h-fit w-full items-center justify-end gap-x-2">
+              <button
+                type="submit"
+                class="w-1/3 cursor-pointer rounded bg-gray-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                class="w-1/3 cursor-pointer rounded bg-red-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </main>
@@ -81,5 +155,6 @@
     <!-- <script src="./scripts/routing.js"></script>
     <script src="./scripts/scripts.js"></script>
     <script src="./scripts/entry.js"></script> -->
+    <script src="./scripts/profile.js"></script>
   </body>
 </html>

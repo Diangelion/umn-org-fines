@@ -51,3 +51,4 @@ ForFe is a website application that is used for Multimedia Nusantara University 
 1. gray-700 -> #364153
 2. gray-300 -> #d1d5dc
 3. neutral-100 -> #f5f5f5
+4. red-700 -> #c10007
