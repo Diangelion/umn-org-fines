@@ -12,15 +12,22 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+    </style>
   </head>
   <body>
-    <main class="box-border min-h-screen w-screen bg-gray-300 p-5">
+    <main class="min-h-screen w-full bg-gray-300 p-5">
       <div
         id="profile-container"
-        class="flex h-fit w-full flex-col items-center justify-center gap-y-10"
+        class="mx-auto flex min-h-screen w-full flex-col items-center justify-center gap-y-10 md:w-3/4"
       >
-        <div class="mx-auto h-fit w-3/4 rounded bg-neutral-100 md:pb-5">
-          <div class="aspect-video w-full rounded-t bg-gray-700"></div>
+        <div class="h-fit w-full rounded bg-neutral-100 md:pb-5">
+          <div class="aspect-[3/1] rounded-t bg-gray-700"></div>
           <div class="mt-[-1.5rem] flex h-fit w-full gap-x-2 p-2 md:px-5">
             <div
               class="h-[6rem] w-[6rem] rounded-full bg-gray-700 md:h-[10rem] md:w-[10rem]"
@@ -69,12 +76,12 @@
 
         <div
           id="edit-profile-form"
-          class="mx-auto h-fit w-3/4 rounded bg-neutral-100 p-6 shadow-md"
+          class="h-fit w-full rounded bg-neutral-100 p-6 shadow-md"
         >
           <!-- Edit Profile Form -->
           <form
             id="register-form"
-            class="gap-y-5"
+            class="space-y-4"
             hx-post="{{ .BaseURL }}/auth/register"
             hx-trigger="submit"
             hx-target="#register-container"
@@ -83,27 +90,51 @@
             <div>
               <label>Cover Photo</label>
               <div
-                class="border-3 mx-auto flex aspect-video h-fit w-1/2 flex-col items-center justify-center border-dashed border-gray-700 p-5"
+                class="border-3 relative flex aspect-[3/1] items-center justify-center border-dashed border-gray-700 p-5 text-center align-middle md:mx-auto md:h-3/4 md:w-3/4"
               >
-                <p>
-                  Upload a cover photo with a
-                  <strong>16:9 aspect ratio</strong>.
-                </p>
-                <p>Recommended size: <strong>1200x675 pixels</strong>.</p>
+                <label for="cover-photo" class="cursor-pointer">
+                  <div>
+                    <p><strong>3:1 aspect ratio</strong></p>
+                    <p>Recommended size: <strong>900x300 pixels</strong>.</p>
+                  </div>
+                  <img
+                    src="./icons/camera.svg"
+                    class="absolute bottom-0 right-0"
+                  />
+                </label>
               </div>
+              <input
+                type="file"
+                id="cover-photo"
+                name="cover-photo"
+                class="hidden"
+                accept="image/*"
+              />
             </div>
 
             <div>
               <label>Profile Photo</label>
               <div
-                class="border-3 mx-auto flex aspect-video h-fit w-1/2 flex-col items-center justify-center border-dashed border-gray-700 p-5"
+                class="border-3 relative mx-auto flex aspect-[1/1] h-1/2 w-1/2 items-center justify-center rounded-full border-dashed border-gray-700 p-5 text-center md:h-full md:w-1/3"
               >
-                <p>
-                  Upload a cover photo with a
-                  <strong>16:9 aspect ratio</strong>.
-                </p>
-                <p>Recommended size: <strong>1200x675 pixels</strong>.</p>
+                <label for="profile-photo" class="cursor-pointer">
+                  <div>
+                    <p><strong>1:1 aspect ratio</strong></p>
+                    <p>Recommended size: <strong>300x300 pixels</strong>.</p>
+                  </div>
+                  <img
+                    src="./icons/camera.svg"
+                    class="absolute bottom-[10%] right-[20%]"
+                  />
+                </label>
               </div>
+              <input
+                type="file"
+                id="profile-photo"
+                name="profile-photo"
+                class="hidden"
+                accept="image/*"
+              />
             </div>
 
             <!-- Name -->
