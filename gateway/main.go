@@ -28,7 +28,7 @@ func main() {
 		log.Println("Main | Pinging databaser error: ", err)
 		return
 	}
-	
+
 	router := mux.NewRouter().StrictSlash(false)
 	jwt := middleware.NewJWT(db, cfg)
 	pagesHandler := handlers.NewPagesHandler(cfg)
@@ -37,6 +37,10 @@ func main() {
     authRouter := router.PathPrefix("/auth").Subrouter()
     authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
     authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
+
+	protectedAuthRouter := authRouter.NewRoute().Subrouter()
+	protectedAuthRouter.Use(jwt.ProtectedMiddleware)
+	protectedAuthRouter.HandleFunc("/edit", handlers.EditUser).Methods("POST")
 
     // 2. Protected Routes (pages requiring authentication)
     protectedRouter := router.NewRoute().Subrouter()
@@ -55,7 +59,7 @@ func main() {
 
 	// Wrap all router with CORS middleware so that every request goes through it.
 	handlerWithCORS := middleware.CORS(router)
-	
+
 	// Start the server
 	serverURL := fmt.Sprintf("http://127.0.0.1:%s", cfg.HTTPPort)
 	fmt.Println("Gateway running at", serverURL)

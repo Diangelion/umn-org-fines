@@ -23,7 +23,7 @@ func ForwardUserRegistration(user models.ForwardUserRegistration) (*http.Respons
 	registrationUrl := fmt.Sprintf("%s/user/register", cfg.BackendURL)
 	contentType := "application/json"
 	reqBody := bytes.NewBuffer(jsonData)
-	
+
 	client := &http.Client{}
 	return client.Post(registrationUrl, contentType, reqBody)
 }
@@ -41,4 +41,19 @@ func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
 
 	client := &http.Client{}
 	return client.Post(loginUrl, contentType, reqBody)
+}
+
+func ForwardUserEdit(user models.UserEdit) (*http.Response, error) {
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		log.Println("ForwardUserEdit | Marshal error: ", err)
+		return nil, errors.New("Unable to marshal user data")
+	}
+
+	registrationUrl := fmt.Sprintf("%s/user/edit", cfg.BackendURL)
+	contentType := "application/json"
+	reqBody := bytes.NewBuffer(jsonData)
+
+	client := &http.Client{}
+	return client.Post(registrationUrl, contentType, reqBody)
 }

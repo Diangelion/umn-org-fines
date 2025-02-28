@@ -35,15 +35,15 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Validate if required fields exist
 	if user.Name == "" || user.Email == "" || user.Password == "" || user.ConfirmPassword == "" {
-		log.Printf("Missing required field(s)\n")
+		log.Printf("RegisterUser | Missing required field(s)\n")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
 	}
-	
+
 	// Validate password & confirm password
 	if user.Password != user.ConfirmPassword {
-		log.Printf("Password & confirm password don't match\n")
+		log.Printf("RegisterUser | Password & confirm password don't match\n")
 		msg := fmt.Sprintf("Password & confirm password don't match. %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
@@ -55,7 +55,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		Email: user.Email,
 		Password: user.Password,
 	}
-	
+
 	// Forward registration request to the backend service
 	response, err := services.ForwardUserRegistration(forwardUser)
 	if err != nil { // This error means the request **did not reach** the backend (e.g., network failure)
@@ -64,7 +64,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer response.Body.Close()
-	
+
 	// Read and decode JSON response
 	var jsonResponse models.Response
 	if err := json.NewDecoder(response.Body).Decode(&jsonResponse); err != nil {
@@ -72,7 +72,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
-	
+
 	msg := jsonResponse.Message
 
 	// Handle non-200 responses by overriding status code
@@ -83,16 +83,16 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.SendAlert(w, "Failed", msg, fileName)
 		return
-	} 
-	
+	}
+
 	w.Header().Set("HX-Trigger", "resetForm")
 	utils.SendAlert(w, "Success", "Your account has been successfully created.", fileName)
 }
-	
-	
+
+
 func LoginUser(w http.ResponseWriter, r *http.Request) {
 	typeMsg := "login"
-	
+
 	// Parse form data
 	if err := utils.ParseRequestBody(r); err != nil {
 		log.Println("LoginUser | Parse request error: ", err)
@@ -100,7 +100,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
 	}
-	
+
 	// Decode form data into User struct
 	var user models.UserLogin
 	if err := utils.DecodeRequestBody(r, &user); err != nil {
@@ -109,15 +109,15 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
 	}
-		
+
     // Validate if required fields exist
     if user.Email == "" || user.Password == "" {
-		log.Printf("Missing required field(s)\n")
+		log.Printf("LoginUser | Missing required field(s)\n")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
         utils.SendAlert(w, "Error", msg, fileName)
         return
     }
-	
+
 	// Forward registration request to the backend service
 	response, err := services.ForwardUserLogin(user)
 	if err != nil {
@@ -125,7 +125,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
         utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
-	
+
 	// Read and decode JSON response
 	var jsonResponse models.Response
 	if err := json.NewDecoder(response.Body).Decode(&jsonResponse); err != nil {
@@ -133,14 +133,14 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
-	
+
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
 		log.Print("LoginUser | Response not ok: ", jsonResponse.Message)
 		utils.SendAlert(w, "Failed", jsonResponse.Message, fileName)
 		return
-	} 
-	
+	}
+
 	// Generate an access token
 	accessToken, err := utils.GenerateAccessToken(jsonResponse.Data["user_id"].(string))
 	if err != nil {
@@ -148,7 +148,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
-	
+
 	// Generate a refresh token
 	refreshToken, err := utils.GenerateRefreshToken(jsonResponse.Data["user_id"].(string))
 	if err != nil {
@@ -156,7 +156,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
-	
+
 	// w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 	// w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
 	authToken := models.AuthorizationToken{
@@ -169,7 +169,67 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		log.Println("LoginUser | Marshal json auth token error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 	}
-	
+
 	w.Header().Set("HX-Trigger", fmt.Sprintf(`{"receiveJWT": %s}`, string(jsonAuthToken)))
 	w.WriteHeader(http.StatusAccepted)
+}
+
+func EditUser(w http.ResponseWriter, r *http.Request) {
+	typeMsg := "edit profile"
+
+	// Parse form data
+	if err := utils.ParseRequestBody(r); err != nil {
+		log.Println("EditUser | Parse request error: ", err)
+		msg := fmt.Sprintf("Invalid input. %s", utils.LoginRegisterErrorMessage(&typeMsg))
+		utils.SendAlert(w, "Error", msg, fileName)
+		return
+	}
+
+	// Decode form data into User struct
+	var user models.UserEdit
+	if err := utils.DecodeRequestBody(r, &user); err != nil {
+		log.Println("EditUser | Decode request error: ", err)
+		msg :=  fmt.Sprintf("Invalid %s form. %s", typeMsg, utils.LoginRegisterErrorMessage(&typeMsg))
+		utils.SendAlert(w, "Error", msg, fileName)
+		return
+	}
+
+	if user.Email == "" || user.Name == "" {
+		log.Printf("EditUser |Missing required field(s)\n")
+		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
+		utils.SendAlert(w, "Error", msg, fileName)
+		return
+	}
+
+	// Forward registration request to the backend service
+	response, err := services.ForwardUserEdit(user)
+	if err != nil { // This error means the request **did not reach** the backend (e.g., network failure)
+		log.Println("EditUser | Forward edit error: ", err)
+		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+		return
+	}
+	defer response.Body.Close()
+
+	// Read and decode JSON response
+	var jsonResponse models.Response
+	if err := json.NewDecoder(response.Body).Decode(&jsonResponse); err != nil {
+		log.Println("EditUser | Decode response error: ", err)
+		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+		return
+	}
+
+	msg := jsonResponse.Message
+
+	// Handle non-200 responses by overriding status code
+	if response.StatusCode >= 400 {
+		log.Print("RegisterUser | Response not ok: ", jsonResponse.Message)
+		if response.StatusCode != 409 { // If not conflict
+			msg = utils.GetGeneralErrorMessage()
+		}
+		utils.SendAlert(w, "Failed", msg, fileName)
+		return
+	}
+
+	// w.Header().Set("HX-Trigger", "resetForm")
+	// utils.SendAlert(w, "Success", "Your account has been successfully created.", fileName)
 }
