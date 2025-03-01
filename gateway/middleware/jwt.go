@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -13,6 +14,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type contextKey string
+const userIdKey contextKey = "userId"
 
 type JWTMiddleware struct {
     DB *sql.DB
@@ -136,7 +139,8 @@ func (m *JWTMiddleware) ProtectedMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), userIdKey, userId)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 

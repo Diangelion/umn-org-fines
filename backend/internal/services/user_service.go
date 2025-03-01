@@ -24,7 +24,7 @@ func (s *UserService) RegisterUser(user *models.UserRegistration) error {
         return errors.New("Failed to hash password.")
     }
     user.Password = hashedPassword // Store in user model
-    
+
     // Create the user
     return s.repo.CreateUser(user)
 }
@@ -35,4 +35,8 @@ func (s *UserService) LoginUser(user *models.UserLogin) (string, error) {
         return "", err
     }
     return userId, nil
+}
+
+func (s *UserService) EditUser(user *models.UserEdit) error {
+    return s.repo.UpdateUser(user)
 }

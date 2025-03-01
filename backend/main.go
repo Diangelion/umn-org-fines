@@ -44,6 +44,7 @@ func main() {
 	authRouter := router.PathPrefix("/user").Subrouter()
 	authRouter.HandleFunc("/register", userHandler.Register).Methods("POST")
 	authRouter.HandleFunc("/login", userHandler.Login).Methods("POST")
+	authRouter.HandleFunc("/edit", userHandler.Edit).Methods("POST")
 
 	// Wrap the router with your CORS middleware so that every request goes through it.
 	handlerWithCORS := middleware.CORS(router)

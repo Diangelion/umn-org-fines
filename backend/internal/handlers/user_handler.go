@@ -43,7 +43,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
     var user models.UserLogin
-    
+
     // Assign request body to user for validation
     if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
         log.Println(err)
@@ -59,4 +59,24 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
     data := models.UserId{UserId: userId}
     utils.SendJSONResponse(w, http.StatusCreated, "Session created", data)
+}
+
+
+func (h *UserHandler) Edit(w http.ResponseWriter, r *http.Request) {
+    var user models.UserEdit
+
+    // Assign request body to user for validation
+    if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+        log.Println(err)
+        utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload", nil)
+        return
+    }
+
+    if err := h.service.EditUser(&user); err != nil {
+        utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
+        return
+    }
+
+    // data := models.UserId{UserId: userId}
+    // utils.SendJSONResponse(w, http.StatusCreated, "Session created", data)
 }

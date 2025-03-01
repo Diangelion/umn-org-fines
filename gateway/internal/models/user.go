@@ -8,9 +8,9 @@ type UserRegistration struct {
 }
 
 type ForwardUserRegistration struct {
-	Name     string `form:"name"`
-	Email    string `form:"email"`
-	Password string `form:"password"`
+	Name     string
+	Email    string
+	Password string
 }
 
 type UserLogin struct {

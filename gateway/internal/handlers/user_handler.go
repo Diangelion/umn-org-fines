@@ -77,7 +77,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
-		log.Print("RegisterUser | Response not ok: ", jsonResponse.Message)
+		log.Print("RegisterUser | Response not ok: ", msg)
 		if response.StatusCode != 409 { // If not conflict
 			msg = utils.GetGeneralErrorMessage()
 		}
@@ -175,6 +175,13 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func EditUser(w http.ResponseWriter, r *http.Request) {
+	userId, ok := r.Context().Value("userId").(string)
+	if !ok {
+		log.Printf("EditUser | Context userId not found\n")
+		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+		return
+	}
+
 	typeMsg := "edit profile"
 
 	// Parse form data
@@ -194,7 +201,7 @@ func EditUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if user.Email == "" || user.Name == "" {
+	if user.Email == "" || user.Name == "" || user.ProfilePhoto == "" || user.CoverPhoto == "" {
 		log.Printf("EditUser |Missing required field(s)\n")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
@@ -202,7 +209,7 @@ func EditUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Forward registration request to the backend service
-	response, err := services.ForwardUserEdit(user)
+	response, err := services.ForwardUserEdit(user, userId)
 	if err != nil { // This error means the request **did not reach** the backend (e.g., network failure)
 		log.Println("EditUser | Forward edit error: ", err)
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
@@ -218,18 +225,12 @@ func EditUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	msg := jsonResponse.Message
-
 	// Handle non-200 responses by overriding status code
 	if response.StatusCode >= 400 {
-		log.Print("RegisterUser | Response not ok: ", jsonResponse.Message)
-		if response.StatusCode != 409 { // If not conflict
-			msg = utils.GetGeneralErrorMessage()
-		}
-		utils.SendAlert(w, "Failed", msg, fileName)
+		log.Print("EditUser | Response not ok: ", jsonResponse.Message)
+		utils.SendAlert(w, "Failed", jsonResponse.Message, fileName)
 		return
 	}
 
-	// w.Header().Set("HX-Trigger", "resetForm")
-	// utils.SendAlert(w, "Success", "Your account has been successfully created.", fileName)
+	utils.SendAlert(w, "Success", "Profile saved.", fileName)
 }

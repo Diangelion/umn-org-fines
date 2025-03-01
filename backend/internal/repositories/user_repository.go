@@ -52,8 +52,8 @@ func (r *UserRepository) CheckCredential(user *models.UserLogin) (string, error)
     var hashedPassword string
 
     query := `
-        SELECT users.id, user_credentials.password 
-	    FROM users JOIN user_credentials 
+        SELECT users.id, user_credentials.password
+	    FROM users JOIN user_credentials
         ON users.id = user_credentials.user_id
 		WHERE users.email = $1
     `
@@ -70,4 +70,9 @@ func (r *UserRepository) CheckCredential(user *models.UserLogin) (string, error)
     }
 
     return userId, nil
+}
+
+
+func (r *UserRepository) UpdateUser(user *models.UserEdit) error {
+    return nil
 }
