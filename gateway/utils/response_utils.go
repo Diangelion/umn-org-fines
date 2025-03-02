@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName string) {
+func SendHTMLDocumentResponse(w http.ResponseWriter, data any, fileName string) {
 	// Locate the template file
 	templatePath := filepath.Join("templates", fileName)
 	tmpl, err := template.ParseFiles(templatePath)
@@ -29,14 +29,14 @@ func SendHTMLDocumentResponse(w http.ResponseWriter, data interface{}, fileName 
 }
 
 // Getter
-func getAlert(title string, errMsg string) interface{} {
+func getAlert(title string, errMsg string) any {
 	return models.Alert{
 		Title: title,
 		Message: errMsg,
 	}
 }
 
-func getAuthPage(baseURL string) interface{} {
+func getAuthPage(baseURL string) any {
 	return models.AuthPage{BaseURL: baseURL}
 }
 

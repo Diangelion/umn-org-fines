@@ -40,6 +40,7 @@ func main() {
 
 	protectedAuthRouter := authRouter.NewRoute().Subrouter()
 	protectedAuthRouter.Use(jwt.ProtectedMiddleware)
+	protectedAuthRouter.HandleFunc("/user", handlers.GetUser).Methods("POST")
 	protectedAuthRouter.HandleFunc("/edit", handlers.EditUser).Methods("POST")
 
     // 2. Protected Routes (pages requiring authentication)

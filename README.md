@@ -52,3 +52,13 @@ ForFe is a website application that is used for Multimedia Nusantara University 
 2. gray-300 -> #d1d5dc
 3. neutral-100 -> #f5f5f5
 4. red-700 -> #c10007
+
+## Self Notes
+
+1. Gateway handle error inside itself -> "Error"
+2. Gateway handle error from backend -> "Failed"
+3. Gateway always create custom error message & log the actual error
+4. Backend always return & log the actual error in each function
+5. Backend create custom error message for returning to gateway in JSON
+6. In both Gateway and Backend, log doesn't need (.) otherwise returned custom error use (.)
+7. Utils or anything besides Internal folder doesn't need to log

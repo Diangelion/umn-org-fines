@@ -17,7 +17,7 @@ func ParseRequestBody(r *http.Request) error {
 }
 
 // Decode form data into the provided struct and return an error if decoding fails
-func DecodeRequestBody(r *http.Request, dest interface{}) error {
+func DecodeRequestBody(r *http.Request, dest any) error {
 	if err := decoder.Decode(dest, r.PostForm); err != nil {
 		return err
 	}

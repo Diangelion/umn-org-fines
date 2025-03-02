@@ -43,6 +43,31 @@ func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
 	return client.Post(loginUrl, contentType, reqBody)
 }
 
+func ForwardUserGet(userId string) (*http.Response, error) {
+	registrationUrl := fmt.Sprintf("%s/user/edit", cfg.BackendURL)
+
+	// Create a new HTTP request with the JSON data
+	req, err := http.NewRequest("GET", registrationUrl, nil)
+	if err != nil {
+		log.Println("ForwardUserGet | Create request error: ", err)
+		return nil, errors.New("Unable to create HTTP request.")
+	}
+
+	// Set the Authorization header (e.g., using a Bearer token)
+	req.Header.Set("Authorization", userId)
+
+	// Send the request using http.Client
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("ForwardUserGet | Send request error: ", err)
+		return nil, errors.New("Unable to send HTTP request.")
+	}
+
+	// Return the response
+	return resp, nil
+}
+
 func ForwardUserEdit(user models.UserEdit, userId string) (*http.Response, error) {
 	jsonData, err := json.Marshal(user)
 	if err != nil {
@@ -58,7 +83,7 @@ func ForwardUserEdit(user models.UserEdit, userId string) (*http.Response, error
 	req, err := http.NewRequest("POST", registrationUrl, reqBody)
 	if err != nil {
 		log.Println("ForwardUserEdit | Create request error: ", err)
-		return nil, errors.New("Unable to create HTTP request")
+		return nil, errors.New("Unable to create HTTP request.")
 	}
 
 	// Set the Content-Type header
@@ -71,7 +96,7 @@ func ForwardUserEdit(user models.UserEdit, userId string) (*http.Response, error
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("ForwardUserEdit | Send request error: ", err)
-		return nil, errors.New("Unable to send HTTP request")
+		return nil, errors.New("Unable to send HTTP request.")
 	}
 
 	// Return the response

@@ -46,7 +46,7 @@ func (m *JWTMiddleware) getJWTKey(whichToken string) []byte {
 
 func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapClaims, error) {
 	// Parse token value
-	parsedToken, err :=  jwt.Parse(tokenValue, func(t *jwt.Token) (interface{}, error) {
+	parsedToken, err :=  jwt.Parse(tokenValue, func(t *jwt.Token) (any, error) {
 		// Ensure the signing method is HMAC.
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			log.Printf("ParseJWT | Unexpected signing method: %v", t.Header["alg"])
@@ -64,7 +64,7 @@ func (m *JWTMiddleware) ParseJWT(tokenValue string, tokenType string) (jwt.MapCl
 	// Extract claims from the token
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok {
-		log.Printf("ParseJWT | Invalid token claims\n")
+		log.Println("ParseJWT | Invalid token claims")
 		return nil, errors.New("Invalid token claims")
 	}
 
@@ -88,14 +88,14 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 	// If access token is invalid, check refresh token
 	refreshToken := r.Header.Get("X-Refresh-Token")
 	if refreshToken == "" {
-		log.Printf("verifyToken | Missing refresh token\n")
+		log.Println("verifyToken | Missing refresh token")
 		return "", errors.New("Missing refresh token")
 	}
 
 	parts := strings.Split(refreshToken, " ")
 
 	if len(parts) != 2 || parts[0] != "Bearer" {
-		log.Printf("verifyToken | Invalid refresh token\n")
+		log.Println("verifyToken | Invalid refresh token")
 		return "", errors.New("Invalid sent refresh token")
 	}
 
@@ -107,7 +107,7 @@ func (m *JWTMiddleware) verifyToken(w http.ResponseWriter, r *http.Request) (str
 
 	userId, ok := claims["user_id"].(string)
 	if !ok {
-		log.Printf("verifyToken | Invalid token claims\n")
+		log.Println("verifyToken | Invalid token claims")
 		return "", errors.New("Invalid token claims")
 	}
 
@@ -151,7 +151,7 @@ func (m *JWTMiddleware) PublicMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		userId, err := m.verifyToken(w, r)
 		if err == nil && m.isUserExists(userId) {
-			log.Printf("PublicMiddleware | Session exist\n")
+			log.Println("PublicMiddleware | Session exist")
 			w.Header().Set("HX-Redirect", "/home")
 			w.WriteHeader(http.StatusAccepted)
 			return

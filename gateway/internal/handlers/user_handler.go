@@ -35,7 +35,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Validate if required fields exist
 	if user.Name == "" || user.Email == "" || user.Password == "" || user.ConfirmPassword == "" {
-		log.Printf("RegisterUser | Missing required field(s)\n")
+		log.Println("RegisterUser | Missing required field(s)")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
@@ -43,7 +43,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Validate password & confirm password
 	if user.Password != user.ConfirmPassword {
-		log.Printf("RegisterUser | Password & confirm password don't match\n")
+		log.Println("RegisterUser | Password & confirm password don't match")
 		msg := fmt.Sprintf("Password & confirm password don't match. %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return
@@ -112,7 +112,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
     // Validate if required fields exist
     if user.Email == "" || user.Password == "" {
-		log.Printf("LoginUser | Missing required field(s)\n")
+		log.Println("LoginUser | Missing required field(s)")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
         utils.SendAlert(w, "Error", msg, fileName)
         return
@@ -157,8 +157,6 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-	// w.Header().Set("X-Refresh-Token", fmt.Sprintf("Bearer %s", refreshToken))
 	authToken := models.AuthorizationToken{
 		AccessToken: fmt.Sprintf("Bearer %s", accessToken),
 		RefreshToken: fmt.Sprintf("Bearer %s", refreshToken),
@@ -174,10 +172,44 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 }
 
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	userId, ok := r.Context().Value("userId").(string)
+	if !ok {
+		log.Println("GetUser | Context userId not found")
+		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+		return
+	}
+
+	response, err := services.ForwardUserGet(userId)
+	if err != nil { // This error means the request **did not reach** the backend (e.g., network failure)
+		log.Println("GetUser | Forward user get error: ", err)
+		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+		return
+	}
+	defer response.Body.Close()
+
+	// // Read and decode JSON response
+	// var jsonResponse models.Response
+	// if err := json.NewDecoder(response.Body).Decode(&jsonResponse); err != nil {
+	// 	log.Println("EditUser | Decode response error: ", err)
+	// 	utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
+	// 	return
+	// }
+
+	// // Handle non-200 responses by overriding status code
+	// if response.StatusCode >= 400 {
+	// 	log.Print("EditUser | Response not ok: ", jsonResponse.Message)
+	// 	utils.SendAlert(w, "Failed", jsonResponse.Message, fileName)
+	// 	return
+	// }
+
+	// utils.SendAlert(w, "Success", "Profile saved.", fileName)
+}
+
 func EditUser(w http.ResponseWriter, r *http.Request) {
 	userId, ok := r.Context().Value("userId").(string)
 	if !ok {
-		log.Printf("EditUser | Context userId not found\n")
+		log.Println("EditUser | Context userId not found")
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
 		return
 	}
@@ -202,7 +234,7 @@ func EditUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if user.Email == "" || user.Name == "" || user.ProfilePhoto == "" || user.CoverPhoto == "" {
-		log.Printf("EditUser |Missing required field(s)\n")
+		log.Println("EditUser | Missing required field(s)")
 		msg := fmt.Sprintf("Missing required field(s). %s", utils.LoginRegisterErrorMessage(&typeMsg))
 		utils.SendAlert(w, "Error", msg, fileName)
 		return

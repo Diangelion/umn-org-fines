@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func SendJSONResponse(w http.ResponseWriter, statusCode int, message string, data interface{}) {
+func SendJSONResponse(w http.ResponseWriter, statusCode int, message string, data any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 
@@ -20,7 +20,7 @@ func SendJSONResponse(w http.ResponseWriter, statusCode int, message string, dat
 	json.NewEncoder(w).Encode(response)
 }
 
-func StatusCodeForError(err error, dupErr interface{}, customStatusCode int) int {
+func StatusCodeForError(err error, dupErr any, customStatusCode int) int {
     if errors.As(err, &dupErr) {
         return customStatusCode
     }

@@ -30,13 +30,13 @@ func (s *UserService) RegisterUser(user *models.UserRegistration) error {
 }
 
 func (s *UserService) LoginUser(user *models.UserLogin) (string, error) {
-    userId, err := s.repo.CheckCredential(user)
-    if err != nil {
-        return "", err
-    }
-    return userId, nil
+    return s.repo.CheckCredential(user)
 }
 
-func (s *UserService) EditUser(user *models.UserEdit) error {
-    return s.repo.UpdateUser(user)
+func (s *UserService) GetUser(userId string) (*models.UserEdit, error) {
+    return s.repo.GetUser(userId)
+}
+
+func (s *UserService) EditUser(user *models.UserEdit, userId string) error {
+    return s.repo.UpdateUser(user, userId)
 }
