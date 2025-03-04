@@ -23,171 +23,46 @@
   <body>
     <main class="min-h-screen w-full bg-gray-300 p-5">
       <div
-        id="profile-container"
-        class="mx-auto flex min-h-screen w-full flex-col items-center justify-center gap-y-10 md:w-3/4"
+        id="home-container"
+        class="mx-auto flex h-[calc(100vh-2.5rem)] justify-center gap-x-10"
       >
-        <div class="h-fit w-full rounded bg-neutral-100 md:pb-5">
-          <div class="aspect-[3/1] rounded-t bg-gray-700"></div>
-          <div class="mt-[-1.5rem] flex h-fit w-full gap-x-2 p-2 md:px-5">
+        <!-- Sidebar -->
+        <div class="w-[25%] p-4">
+          <a href="/profile">
             <div
-              class="h-[6rem] w-[6rem] rounded-full bg-gray-700 md:h-[10rem] md:w-[10rem]"
-            ></div>
-            <div
-              class="mr-auto flex w-fit flex-col gap-y-[0.2rem] self-end text-white"
+              class="flex cursor-pointer items-center space-x-4 rounded-[0.5em] p-2 hover:shadow-sm"
             >
-              <p class="ml-[0.2rem] bg-gray-700 font-semibold md:text-2xl">
-                Bryan Richie
-              </p>
-              <p class="ml-[0.2rem] bg-gray-700 text-xs md:text-xl">2 groups</p>
-              <div class="relative z-[0] flex bg-gray-700">
-                <div
-                  class="relative top-0 h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
-                ></div>
-                <div
-                  class="relative left-[-0.2rem] top-0 z-[-1] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
-                ></div>
-                <div
-                  class="relative left-[-0.4rem] top-0 z-[-2] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
-                ></div>
-                <div
-                  class="relative left-[-0.6rem] top-0 z-[-3] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
-                ></div>
-                <div
-                  class="relative left-[-0.8rem] top-0 z-[-4] h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
-                >
-                  <img
-                    src="./icons/3dots_horizontal.svg"
-                    class="translate-[-50%] absolute left-[50%] top-[50%]"
-                  />
-                </div>
-              </div>
+              <div class="h-12 w-12 rounded-full bg-gray-700"></div>
+              <span class="text-gray-700">Name</span>
             </div>
+          </a>
 
-            <button
-              type="button"
-              class="flex w-fit cursor-pointer gap-x-2 self-end rounded-lg bg-gray-700 px-3 py-2 font-semibold text-neutral-100 transition duration-200 hover:opacity-85"
-              onclick="triggerEditProfileForm()"
-            >
-              <img src="./icons/user_edit.svg" />
-              Edit profile
-            </button>
-          </div>
-        </div>
+          <hr class="my-4 border-gray-700" />
 
-        <div
-          id="edit-profile-form"
-          class="h-fit w-full rounded bg-neutral-100 p-6 shadow-md"
-        >
-          <!-- Edit Profile Form -->
-          <form
-            id="register-form"
-            class="space-y-4"
-            hx-post="{{ .BaseURL }}/auth/register"
-            hx-trigger="submit"
-            hx-target="#register-container"
-            hx-swap="beforeend"
+          <div
+            class="flex cursor-pointer justify-between rounded-t-[0.5em] px-2 py-1 hover:shadow-sm"
+            onclick="toggleOrganizationList(this)"
           >
-            <div>
-              <label>Cover Photo</label>
+            <h2>Organizations</h2>
+            <img src="./icons/caret_down.svg" />
+          </div>
+
+          <ul class="overflow-hidden rounded-b-[0.5em] shadow-sm">
+            <li class="cursor-pointer py-1">
               <div
-                class="border-3 relative flex aspect-[3/1] items-center justify-center border-dashed border-gray-700 p-5 text-center align-middle md:mx-auto md:h-3/4 md:w-3/4"
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
               >
-                <img
-                  id="cover-photo-preview"
-                  class="absolute left-0 top-0 z-[0] aspect-[3/1] w-full object-cover"
-                />
-                <label for="cover-photo" class="cursor-pointer">
-                  <div>
-                    <p><strong>3:1 aspect ratio</strong></p>
-                    <p>Recommended size: <strong>900x300 pixels</strong>.</p>
-                  </div>
-                  <img
-                    src="./icons/camera.svg"
-                    class="absolute bottom-0 right-0 z-[1]"
-                  />
-                </label>
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p>Org 1</p>
               </div>
-              <input
-                type="file"
-                id="cover-photo"
-                name="cover-photo"
-                class="hidden"
-                accept="image/*"
-                onchange="setPreviewPhoto(event, 'cover-photo-preview')"
-              />
-            </div>
-
-            <div>
-              <label>Profile Photo</label>
-              <div
-                class="border-3 relative mx-auto flex aspect-[1] h-1/2 w-1/2 items-center justify-center rounded-full border-dashed border-gray-700 p-5 text-center md:h-full md:w-1/3"
-              >
-                <img
-                  id="profile-photo-preview"
-                  class="absolute left-0 top-0 z-[0] aspect-[1] w-full rounded-full object-cover"
-                />
-                <label for="profile-photo" class="cursor-pointer">
-                  <div>
-                    <p><strong>1:1 aspect ratio</strong></p>
-                    <p>Recommended size: <strong>300x300 pixels</strong>.</p>
-                  </div>
-                  <img
-                    src="./icons/camera.svg"
-                    class="absolute bottom-[10%] right-[20%] z-[1]"
-                  />
-                </label>
-              </div>
-              <input
-                type="file"
-                id="profile-photo"
-                name="profile-photo"
-                class="hidden"
-                accept="image/*"
-                onchange="setPreviewPhoto(event, 'profile-photo-preview')"
-              />
-            </div>
-
-            <!-- Name -->
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              required
-              class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              pattern="^[a-zA-Z\s]+$"
-              title="Only letters and spaces allowed"
-              autocomplete="on"
-            />
-
-            <!-- Email -->
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              required
-              class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              title="Please enter a valid email address (e.g., user@example.com)"
-              autocomplete="on"
-            />
-
-            <!-- Submit Button -->
-            <div class="flex h-fit w-full items-center justify-end gap-x-2">
-              <button
-                type="submit"
-                class="w-1/3 cursor-pointer rounded bg-gray-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                class="w-1/3 cursor-pointer rounded bg-red-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
-                onclick="removeEditProfileForm()"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+            </li>
+          </ul>
         </div>
+
+        <div class="max-h-full border-l border-gray-700"></div>
+
+        <!-- Main Content -->
+        <div class="max-h-full w-[50%] p-4"></div>
       </div>
     </main>
     <!-- Modules -->
@@ -196,7 +71,7 @@
     <!-- Script -->
     <!-- <script src="./scripts/routing.js"></script>
     <script src="./scripts/scripts.js"></script>
-    <script src="./scripts/entry.js"></script> -->
-    <script src="./scripts/profile.js"></script>
+    <script src="./scripts/entry.js"></script>
+    <script src="./scripts/profile.js"></script> -->
   </body>
 </html>
