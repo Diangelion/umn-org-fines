@@ -48,10 +48,11 @@ ForFe is a website application that is used for Multimedia Nusantara University 
 
 ## Color Palette
 
-1. gray-700 -> #364153
+1. neutral-100 -> #f5f5f5
 2. gray-300 -> #d1d5dc
-3. neutral-100 -> #f5f5f5
-4. red-700 -> #c10007
+3. gray-400 -> #99a1af
+4. gray-700 -> #364153
+5. red-700 -> #c10007
 
 ## Self Notes
 
