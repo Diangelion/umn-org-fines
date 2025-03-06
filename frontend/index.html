@@ -24,33 +24,84 @@
     <main class="min-h-screen w-full bg-gray-300 p-5">
       <div
         id="home-container"
-        class="mx-auto flex h-[calc(100vh-2.5rem)] justify-center gap-x-10"
+        class="mx-auto flex h-[calc(100vh-2.5rem)] flex-col-reverse gap-x-10 md:flex-row md:justify-center"
       >
         <!-- Sidebar -->
-        <div class="w-[25%] p-4">
-          <a href="/profile">
+        <div
+          class="flex w-full items-center justify-center p-4 md:block md:w-[35%] md:justify-start lg:w-[25%]"
+        >
+          <a href="/profile" class="basis-full">
             <div
-              class="flex cursor-pointer items-center space-x-4 rounded-[0.5rem] p-2 hover:shadow-sm"
+              class="flex cursor-pointer items-center justify-center rounded-[0.5rem] p-2 hover:shadow-sm md:w-full md:justify-start md:space-x-4"
             >
               <div class="h-12 w-12 rounded-full bg-gray-700"></div>
-              <span class="text-gray-700">Name</span>
+              <span class="hidden text-gray-700 md:block">Name</span>
             </div>
           </a>
 
-          <hr class="my-4 border-gray-700" />
+          <hr class="my-4 hidden border-gray-700 md:block" />
 
           <div
-            class="flex cursor-pointer justify-between rounded-t-[0.5rem] px-2 py-1 hover:shadow-sm"
+            class="block basis-full cursor-pointer rounded-t-[0.5rem] px-2 py-1 hover:shadow-sm md:flex md:justify-between"
             onclick="toggleOrganizationList(this)"
           >
-            <h2>Organizations</h2>
-            <img src="./icons/caret_left.svg" alt="Show Organizations Icon" />
+            <h2 class="hidden md:block">Organizations</h2>
+            <img
+              src="./icons/caret_left.svg"
+              alt="Show Organizations Icon"
+              class="hidden md:block"
+            />
+            <img
+              src="./icons/list.svg"
+              alt="Show Organizations Icon"
+              class="h-12 w-12 justify-self-center md:hidden"
+            />
           </div>
 
           <ul
             id="organization-list"
-            class="mb-1 hidden overflow-hidden rounded-b-[0.5rem] shadow-sm"
+            class="md:rounded-t-0 fixed bottom-[6rem] hidden max-h-[15rem] w-[50%] overflow-y-auto rounded-b-[0.5rem] rounded-t-[0.5rem] bg-neutral-100 shadow-[0_0_7.5px_rgba(0,0,0)] md:static md:mb-1 md:w-auto md:bg-inherit md:shadow-sm"
           >
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p>Org 1</p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p>Org 1</p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p>Org 1</p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p>Org 1</p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p>Org 1</p>
+              </div>
+            </li>
             <li class="cursor-pointer py-1">
               <div
                 class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
@@ -86,30 +137,44 @@
           </ul>
 
           <div
-            class="mb-1 cursor-pointer rounded-[0.5em] px-2 py-1 hover:shadow-sm"
+            class="basis-full cursor-pointer rounded-[0.5em] px-2 py-1 hover:shadow-sm md:mb-1 md:justify-between"
           >
-            <a href="/create" class="flex justify-between">
-              <h2>Create Organization</h2>
-              <img src="./icons/plus.svg" alt="Plus Icon" />
+            <a href="/create" class="block justify-between md:flex">
+              <h2 class="hidden md:block">Create Organization</h2>
+              <img
+                src="./icons/plus.svg"
+                alt="Plus Icon"
+                class="h-12 w-12 justify-self-center md:h-[auto] md:w-[auto]"
+              />
             </a>
           </div>
 
           <div
-            class="mb-1 flex cursor-pointer justify-between rounded-[0.5rem] px-2 py-1 hover:shadow-sm"
+            class="block basis-full cursor-pointer rounded-[0.5rem] px-2 py-1 hover:shadow-sm md:mb-1 md:flex md:justify-between"
+            onclick="toggleJoinOrganization()"
           >
-            <h2>Join Organization</h2>
-            <img src="./icons/magnifying_glass.svg" alt="Search Icon" />
+            <h2 class="hidden md:block">Join Organization</h2>
+            <img
+              src="./icons/magnifying_glass.svg"
+              alt="Search Icon"
+              class="h-12 w-12 justify-self-center md:h-[auto] md:w-[auto]"
+            />
           </div>
         </div>
 
-        <div class="max-h-full border-l border-gray-700"></div>
+        <div
+          class="max-h-full w-full border-t border-gray-700 md:w-auto md:border-l"
+        ></div>
 
         <!-- Main Content -->
-        <div class="max-h-full w-[50%] p-4"></div>
+        <div
+          class="h-full max-h-full w-full md:w-[65%] md:p-4 lg:w-[50%]"
+        ></div>
       </div>
 
       <div
-        class="absolute left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden bg-[rgb(0,0,0)]/25"
+        id="join-organization-container"
+        class="absolute left-0 top-0 flex hidden h-screen w-screen items-center justify-center overflow-hidden bg-[rgb(0,0,0)]/25"
       >
         <div
           class="aspect-[7/3] w-[80vw] rounded-[0.5rem] bg-gray-300 p-5 sm:w-[50vw]"
@@ -147,6 +212,7 @@
                 <button
                   type="button"
                   class="w-1/3 cursor-pointer rounded bg-red-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
+                  onclick="toggleJoinOrganization()"
                 >
                   Cancel
                 </button>

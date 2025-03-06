@@ -10,3 +10,12 @@ function toggleOrganizationList(element) {
     imgElement.src = imgElement.src.replace("down", "left");
   }
 }
+
+function toggleJoinOrganization() {
+  const element = document.getElementById("join-organization-container");
+  if (element.classList.contains("hidden")) {
+    element.classList.remove("hidden");
+  } else {
+    element.classList.add("hidden");
+  }
+}
