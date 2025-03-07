@@ -167,9 +167,37 @@
         ></div>
 
         <!-- Main Content -->
-        <div
-          class="h-full max-h-full w-full md:w-[65%] md:p-4 lg:w-[50%]"
-        ></div>
+        <div class="h-full max-h-full w-full md:w-[65%] md:p-4 lg:w-[50%]">
+          <div class="w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700">
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!-- 3rem from w-12 above, and 1rem from gap-x-4 in the container -->
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p class="max-w-[40%] overflow-hidden text-ellipsis text-xs">
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div></div>
+          </div>
+        </div>
       </div>
 
       <div
@@ -177,7 +205,7 @@
         class="absolute left-0 top-0 flex hidden h-screen w-screen items-center justify-center overflow-hidden bg-[rgb(0,0,0)]/25"
       >
         <div
-          class="aspect-[7/3] w-[80vw] rounded-[0.5rem] bg-gray-300 p-5 sm:w-[50vw]"
+          class="h-[30vh] w-[90vw] rounded-[0.5rem] bg-gray-300 p-5 sm:w-[70vw] md:w-[60vw] lg:w-[50vw]"
         >
           <div class="flex h-full w-full flex-col">
             <div class="text-center">
