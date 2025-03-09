@@ -1,0 +1,623 @@
+<div
+  id="home-container"
+  class="mx-auto flex h-[calc(100vh-2.5rem)] flex-col-reverse gap-x-10 md:flex-row md:justify-center"
+>
+  <!-- Sidebar -->
+  <div
+    class="flex w-full items-center justify-center p-4 md:block md:w-[35%] md:justify-start lg:w-[25%]"
+  >
+    <a href="/profile" class="basis-full">
+      <div
+        class="flex cursor-pointer items-center justify-center rounded-[0.5rem] p-2 hover:shadow-sm md:w-full md:justify-start md:space-x-4"
+      >
+        <div class="h-12 w-12 rounded-full bg-gray-700"></div>
+        <span class="hidden text-gray-700 md:block">Name</span>
+      </div>
+    </a>
+
+    <hr class="my-4 hidden border-gray-700 md:block" />
+
+    <div
+      class="block basis-full cursor-pointer rounded-t-[0.5rem] px-2 py-1 hover:shadow-sm md:flex md:justify-between"
+      onclick="toggleOrganizationList(this)"
+    >
+      <h2 class="hidden md:block">Organizations</h2>
+      <img
+        src="./icons/caret_left.svg"
+        alt="Show Organizations Icon"
+        class="hidden md:block"
+      />
+      <img
+        src="./icons/list.svg"
+        alt="Show Organizations Icon"
+        class="h-12 w-12 justify-self-center md:hidden"
+      />
+    </div>
+
+    <ul
+      id="organization-list"
+      class="md:rounded-t-0 fixed bottom-[6rem] hidden max-h-[15rem] w-[50%] overflow-y-auto rounded-b-[0.5rem] rounded-t-[0.5rem] bg-neutral-100 shadow-[0_0_7.5px_rgba(0,0,0)] md:static md:mb-1 md:w-auto md:bg-inherit md:shadow-sm"
+    >
+      <li class="py-1 pl-4 pr-2 text-gray-400">No organization joined</li>
+    </ul>
+
+    <!-- <ul
+            id="organization-list"
+            class="md:rounded-t-0 fixed bottom-[6rem] hidden max-h-[15rem] w-[50%] overflow-y-auto rounded-b-[0.5rem] rounded-t-[0.5rem] bg-neutral-100 shadow-[0_0_7.5px_rgba(0,0,0)] md:static md:mb-1 md:w-auto md:bg-inherit md:shadow-sm"
+          >
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+            <li class="cursor-pointer py-1">
+              <div
+                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
+              >
+                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
+                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
+                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
+                </p>
+              </div>
+            </li>
+          </ul> -->
+
+    <div
+      class="basis-full cursor-pointer rounded-[0.5em] px-2 py-1 hover:shadow-sm md:mb-1 md:justify-between"
+    >
+      <a href="/create" class="block justify-between md:flex">
+        <h2 class="hidden md:block">Create Organization</h2>
+        <img
+          src="./icons/plus.svg"
+          alt="Plus Icon"
+          class="h-12 w-12 justify-self-center md:h-[auto] md:w-[auto]"
+        />
+      </a>
+    </div>
+
+    <div
+      class="block basis-full cursor-pointer rounded-[0.5rem] px-2 py-1 hover:shadow-sm md:mb-1 md:flex md:justify-between"
+      onclick="toggleJoinOrganization()"
+    >
+      <h2 class="hidden md:block">Join Organization</h2>
+      <img
+        src="./icons/magnifying_glass.svg"
+        alt="Search Icon"
+        class="h-12 w-12 justify-self-center md:h-[auto] md:w-[auto]"
+      />
+    </div>
+  </div>
+
+  <div
+    class="max-h-full w-full border-t border-gray-700 md:w-auto md:border-l"
+  ></div>
+
+  <!-- Main Content -->
+  <div
+    class="flex h-full max-h-full w-full items-center justify-center md:w-[65%] md:p-4 lg:w-[50%]"
+  >
+    <p class="text-3xl font-bold text-gray-400">NO POST</p>
+  </div>
+  <!-- <div
+          class="h-full max-h-full w-full overflow-y-auto md:w-[65%] md:p-4 lg:w-[50%]"
+        >
+          <div
+            class="mb-4 w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700"
+          >
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!~~ 3rem from w-12 above, and 1rem from gap-x-4 in the container ~~>
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p
+                    class="max-w-[40%] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+                  >
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div class="w-full font-semibold md:flex md:flex-wrap md:gap-x-1">
+              <p class="text-gray-700">Fine Title</p>
+              <p class="text-gray-400">5 March 2023 ~ 00:00 - 20.00</p>
+            </div>
+            <p class="text-justify text-gray-700">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book
+            </p>
+
+            <button
+              class="mr-2 mt-2 w-1/4 cursor-pointer rounded-2xl bg-red-700 px-2 py-1 text-neutral-100 hover:opacity-85 hover:shadow-md"
+              type="button"
+            >
+              Rp. 15.000,00
+            </button>
+            <span class="font-bold text-red-700">UNPAID</span>
+          </div>
+          <div
+            class="mb-4 w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700"
+          >
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!~~ 3rem from w-12 above, and 1rem from gap-x-4 in the container ~~>
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p
+                    class="max-w-[40%] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+                  >
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div class="w-full font-semibold md:flex md:flex-wrap md:gap-x-1">
+              <p class="text-gray-700">Fine Title</p>
+              <p class="text-gray-400">5 March 2023 ~ 00:00 - 20.00</p>
+            </div>
+            <p class="text-justify text-gray-700">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book
+            </p>
+
+            <button
+              class="mr-2 mt-2 w-1/4 cursor-pointer rounded-2xl bg-red-700 px-2 py-1 text-neutral-100 hover:opacity-85 hover:shadow-md"
+              type="button"
+            >
+              Rp. 15.000,00
+            </button>
+            <span class="font-bold text-red-700">UNPAID</span>
+          </div>
+          <div
+            class="mb-4 w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700"
+          >
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!~~ 3rem from w-12 above, and 1rem from gap-x-4 in the container ~~>
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p
+                    class="max-w-[40%] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+                  >
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div class="w-full font-semibold md:flex md:flex-wrap md:gap-x-1">
+              <p class="text-gray-700">Fine Title</p>
+              <p class="text-gray-400">5 March 2023 ~ 00:00 - 20.00</p>
+            </div>
+            <p class="text-justify text-gray-700">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book
+            </p>
+
+            <button
+              class="mr-2 mt-2 w-1/4 cursor-pointer rounded-2xl bg-red-700 px-2 py-1 text-neutral-100 hover:opacity-85 hover:shadow-md"
+              type="button"
+            >
+              Rp. 15.000,00
+            </button>
+            <span class="font-bold text-red-700">UNPAID</span>
+          </div>
+          <div
+            class="mb-4 w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700"
+          >
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!~~ 3rem from w-12 above, and 1rem from gap-x-4 in the container ~~>
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p
+                    class="max-w-[40%] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+                  >
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div class="w-full font-semibold md:flex md:flex-wrap md:gap-x-1">
+              <p class="text-gray-700">Fine Title</p>
+              <p class="text-gray-400">5 March 2023 ~ 00:00 - 20.00</p>
+            </div>
+            <p class="text-justify text-gray-700">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book
+            </p>
+
+            <button
+              class="mr-2 mt-2 w-1/4 cursor-pointer rounded-2xl bg-red-700 px-2 py-1 text-neutral-100 hover:opacity-85 hover:shadow-md"
+              type="button"
+            >
+              Rp. 15.000,00
+            </button>
+            <span class="font-bold text-red-700">UNPAID</span>
+          </div>
+          <div
+            class="mb-4 w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700"
+          >
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!~~ 3rem from w-12 above, and 1rem from gap-x-4 in the container ~~>
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p
+                    class="max-w-[40%] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+                  >
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div class="w-full font-semibold md:flex md:flex-wrap md:gap-x-1">
+              <p class="text-gray-700">Fine Title</p>
+              <p class="text-gray-400">5 March 2023 ~ 00:00 - 20.00</p>
+            </div>
+            <p class="text-justify text-gray-700">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book
+            </p>
+
+            <button
+              class="mr-2 mt-2 w-1/4 cursor-pointer rounded-2xl bg-red-700 px-2 py-1 text-neutral-100 hover:opacity-85 hover:shadow-md"
+              type="button"
+            >
+              Rp. 15.000,00
+            </button>
+            <span class="font-bold text-red-700">UNPAID</span>
+          </div>
+          <div
+            class="mb-4 w-full rounded-[0.5rem] bg-neutral-100 p-5 text-gray-700"
+          >
+            <div class="flex w-full items-center gap-x-4">
+              <div class="relative h-12 w-12">
+                <div
+                  class="aspect-1 absolute h-full w-full rounded-full bg-gray-700"
+                ></div>
+                <div
+                  class="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-red-700"
+                ></div>
+              </div>
+
+              <!~~ 3rem from w-12 above, and 1rem from gap-x-4 in the container ~~>
+              <div class="max-w-[calc(100%-3rem-1rem)] font-bold">
+                <p class="max-w-full overflow-hidden text-ellipsis">
+                  Organization 1
+                </p>
+                <div class="flex w-full gap-x-1">
+                  <p
+                    class="max-w-[40%] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+                  >
+                    sssssssssssssssssssssssssssssssssssssssssssssss
+                  </p>
+                  <p class="text-xs text-gray-400">5 March 2023 at 19:52</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="mb-4 mt-2 bg-gray-700" />
+
+            <div class="w-full font-semibold md:flex md:flex-wrap md:gap-x-1">
+              <p class="text-gray-700">Fine Title</p>
+              <p class="text-gray-400">5 March 2023 ~ 00:00 - 20.00</p>
+            </div>
+            <p class="text-justify text-gray-700">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book
+            </p>
+
+            <button
+              class="mr-2 mt-2 w-1/4 cursor-pointer rounded-2xl bg-red-700 px-2 py-1 text-neutral-100 hover:opacity-85 hover:shadow-md"
+              type="button"
+            >
+              Rp. 15.000,00
+            </button>
+            <span class="font-bold text-red-700">UNPAID</span>
+          </div>
+        </div> -->
+</div>
+
+<div
+  id="join-organization-container"
+  class="absolute left-0 top-0 flex hidden h-screen w-screen items-center justify-center overflow-hidden bg-[rgb(0,0,0)]/25"
+>
+  <div
+    class="h-[17.5rem] w-[90vw] rounded-[0.5rem] bg-gray-300 p-5 sm:w-[70vw] md:w-[60vw] lg:w-[50vw]"
+  >
+    <div class="flex h-full w-full flex-col">
+      <div class="text-center">
+        <h2 class="text-center text-2xl font-bold text-gray-700">
+          Join an Organization
+        </h2>
+        <p>Enter an invitational code below to join an existing organization</p>
+      </div>
+      <hr class="mb-6 mt-4 bg-gray-700" />
+
+      <div class="mb-[auto]">
+        <label class="text-gray-700 opacity-85">
+          Code<span class="text-red-700">*</span>
+        </label>
+        <input
+          id="input-code"
+          type="text"
+          name="invitational_code"
+          placeholder="e.g. hTKzmak123mkkd0"
+          required
+          class="w-full rounded border border-2 border-gray-700 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          pattern=".{8,}"
+          title="Invalid code, must be at least 8 characters"
+        />
+      </div>
+
+      <div class="flex w-full justify-end">
+        <div class="flex h-fit w-full items-center justify-end gap-x-2">
+          <button
+            type="button"
+            class="w-1/3 cursor-pointer rounded bg-red-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
+            onclick="toggleJoinOrganization()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="w-1/3 cursor-pointer rounded bg-gray-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
