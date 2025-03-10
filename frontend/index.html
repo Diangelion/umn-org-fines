@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ForFe</title>
     <link rel="icon" type="image/svg" href="./icons/favicon.svg" />
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <script
-      src="https://unpkg.com/htmx.org@2.0.4"
-      integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.ckeditor.com/ckeditor5/44.3.0/ckeditor5.css"
+    />
     <style>
       *,
       *::before,
@@ -24,22 +23,151 @@
         scrollbar-color: #364153#d1d5dc;
       }
     </style>
+
+    <!-- JS -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script
+      src="https://unpkg.com/htmx.org@2.0.4"
+      integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   </head>
+
   <body>
     <main class="min-h-screen w-full bg-gray-300 p-5">
-      <div
-        id="create-organization-container"
-        class="h-screen w-full bg-red-700"
-      ></div>
+      <div class="flex min-h-[calc(100vh-2.5rem)] items-center justify-center">
+        <div
+          id="create-organization-container"
+          class="mx-auto w-full rounded-lg bg-neutral-100 p-5 shadow-md md:w-[60%]"
+        >
+          <form class="space-y-4">
+            <div>
+              <label>Organization Photo</label>
+              <div
+                class="border-3 relative mx-auto flex aspect-[1] h-1/2 w-1/2 items-center justify-center rounded-full border-dashed border-gray-700 p-5 text-center md:h-full md:w-1/3"
+              >
+                <img
+                  id="organization-photo-preview"
+                  class="absolute left-0 top-0 z-[0] aspect-[1] w-full rounded-full object-cover"
+                  alt="Organization Photo Preview"
+                />
+                <label for="organization-photo" class="cursor-pointer">
+                  <div>
+                    <p><strong>1:1 aspect ratio</strong></p>
+                    <p>Recommended size: <strong>300x300 pixels</strong>.</p>
+                  </div>
+                  <img
+                    src="./icons/camera.svg"
+                    class="absolute bottom-[10%] right-[20%] z-[1]"
+                    alt="Camera Icon"
+                  />
+                </label>
+              </div>
+              <input
+                type="file"
+                id="organization-photo"
+                name="organization-photo"
+                class="hidden"
+                accept="image/*"
+                onchange="setPreviewPhoto(event, 'organization-photo-preview')"
+              />
+            </div>
+
+            <input
+              type="text"
+              name="organization_title"
+              placeholder="Organization Title"
+              class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              pattern="^[a-zA-Z\s]+$"
+              title="Only letters and spaces allowed"
+              autocomplete="on"
+              required
+            />
+
+            <div>
+              <label>Start Date</label>
+              <input
+                type="date"
+                name="startDate"
+                class="w-full cursor-pointer rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                required
+              />
+            </div>
+
+            <div>
+              <label>End Date</label>
+              <input
+                type="date"
+                name="endDate"
+                class="w-full cursor-pointer rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                required
+              />
+            </div>
+
+            <div>
+              <label>Organization Descriptions</label>
+              <textarea
+                id="editor"
+                placeholder="Enter descriptions..."
+                required
+              ></textarea>
+            </div>
+
+            <!~~ Submit Button ~~>
+            <div class="flex h-fit w-full items-center justify-end gap-x-2">
+              <a
+                class="w-1/3 cursor-pointer rounded bg-red-700 py-2 text-center font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
+                href="/"
+              >
+                Cancel
+              </a>
+              <button
+                type="submit"
+                class="w-1/3 cursor-pointer rounded bg-gray-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
-    <!-- Modules -->
-    <!-- <script src="./scripts/modules/auth.js"></script>
-    <script src="./scripts/modules/storage.js"></script> -->
-    <!-- Script -->
+    <!~~ Modules ~~>
+    <script src="./scripts/modules/auth.js"></script>
+    <script src="./scripts/modules/storage.js"></script>
+
+    <!~~ Script ~~>
     <!-- <script src="./scripts/routing.js"></script>
     <script src="./scripts/scripts.js"></script>
-    <script src="./scripts/entry.js"></script>
-    <script src="./scripts/profile.js"></script> -->
+    <script src="./scripts/entry.js"></script> -->
+    <script src="./scripts/profile.js"></script>
     <script src="./scripts/home.js"></script>
+
+    <!~~ Library ~~>
+    <script src="https://cdn.ckeditor.com/ckeditor5/44.3.0/ckeditor5.umd.js"></script>
+    <script>
+      const { ClassicEditor, Essentials, Bold, Italic, Font, Paragraph } =
+        CKEDITOR;
+      ClassicEditor.create(document.querySelector("#editor"), {
+        licenseKey:
+          "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzMxODcxOTksImp0aSI6IjVmZDJkNDUxLTdhNGUtNDcxOC04MWY0LTk1Y2YyMzRiNzRlMiIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIl0sInZjIjoiYzM2YzY2MzIifQ.FgmquLrDN2eDzkhRz6JxKIngwaAZpA7w8sS5Anwg4jmLODS3FbChuCBCz57XvCmR3Lx7JN594XZmPfLeGfSFbw",
+        plugins: [Essentials, Bold, Italic, Font, Paragraph],
+        toolbar: [
+          "undo",
+          "redo",
+          "|",
+          "bold",
+          "italic",
+          "|",
+          "fontSize",
+          "fontFamily",
+          "fontColor",
+          "fontBackgroundColor",
+        ],
+      }).catch((error) => {
+        console.error(error);
+      });
+    </script>
   </body>
 </html>

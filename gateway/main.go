@@ -34,6 +34,7 @@ func main() {
 	pagesHandler := handlers.NewPagesHandler(cfg)
 
     // 1. Auth API Routes (should come first as they're most specific)
+	// User Profile
     authRouter := router.PathPrefix("/auth").Subrouter()
     authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
     authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
@@ -42,6 +43,14 @@ func main() {
 	protectedAuthRouter.Use(jwt.ProtectedMiddleware)
 	protectedAuthRouter.HandleFunc("/user", handlers.GetUser).Methods("POST")
 	protectedAuthRouter.HandleFunc("/edit", handlers.EditUser).Methods("POST")
+
+	// Organization
+	orgRouter := router.PathPrefix("/organization").Subrouter()
+	orgRouter.Use(jwt.ProtectedMiddleware)
+	orgRouter.HandleFunc("/get-all", handlers.GetListOrganizations).Methods("GET")
+	orgRouter.HandleFunc("/get", handlers.GetSingleOrganization).Methods("GET")
+	orgRouter.HandleFunc("/create", handlers.CreateOrganization).Methods("POST")
+	orgRouter.HandleFunc("/join", handlers.JoinOrganization).Methods("POST")
 
     // 2. Protected Routes (pages requiring authentication)
     protectedRouter := router.NewRoute().Subrouter()
