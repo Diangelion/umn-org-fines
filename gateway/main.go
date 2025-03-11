@@ -36,21 +36,21 @@ func main() {
     // 1. Auth API Routes (should come first as they're most specific)
 	// User Profile
     authRouter := router.PathPrefix("/auth").Subrouter()
-    authRouter.HandleFunc("/register", handlers.RegisterUser).Methods("POST")
-    authRouter.HandleFunc("/login", handlers.LoginUser).Methods("POST")
+    authRouter.HandleFunc("/register", handlers.RegisterUserHandler).Methods("POST")
+    authRouter.HandleFunc("/login", handlers.LoginUserHandler).Methods("POST")
 
 	protectedAuthRouter := authRouter.NewRoute().Subrouter()
 	protectedAuthRouter.Use(jwt.ProtectedMiddleware)
-	protectedAuthRouter.HandleFunc("/user", handlers.GetUser).Methods("POST")
-	protectedAuthRouter.HandleFunc("/edit", handlers.EditUser).Methods("POST")
+	protectedAuthRouter.HandleFunc("/user", handlers.GetUserHandler).Methods("GET")
+	protectedAuthRouter.HandleFunc("/edit", handlers.EditUserHandler).Methods("POST")
 
 	// Organization
 	orgRouter := router.PathPrefix("/organization").Subrouter()
 	orgRouter.Use(jwt.ProtectedMiddleware)
-	orgRouter.HandleFunc("/get-all", handlers.GetListOrganizations).Methods("GET")
-	orgRouter.HandleFunc("/get", handlers.GetSingleOrganization).Methods("GET")
-	orgRouter.HandleFunc("/create", handlers.CreateOrganization).Methods("POST")
-	orgRouter.HandleFunc("/join", handlers.JoinOrganization).Methods("POST")
+	// orgRouter.HandleFunc("/get-all", handlers.GetListOrganizations).Methods("GET")
+	// orgRouter.HandleFunc("/get", handlers.GetSingleOrganization).Methods("GET")
+	orgRouter.HandleFunc("/create", handlers.CreateOrganizationHandler).Methods("POST")
+	// orgRouter.HandleFunc("/join", handlers.JoinOrganization).Methods("POST")
 
     // 2. Protected Routes (pages requiring authentication)
     protectedRouter := router.NewRoute().Subrouter()
@@ -65,7 +65,7 @@ func main() {
     publicRouter.HandleFunc("/register", pagesHandler.RegisterPage).Methods("GET")
 
     // 4. Not Found Handler (should be on main router)
-    router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFound)
+    router.NotFoundHandler = http.HandlerFunc(pagesHandler.NotFoundPage)
 
 	// Wrap all router with CORS middleware so that every request goes through it.
 	handlerWithCORS := middleware.CORS(router)

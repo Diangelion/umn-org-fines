@@ -45,6 +45,7 @@ ForFe is a website application that is used for Multimedia Nusantara University 
 2. Stackoverflow -> bug/problem fixing
 3. Github Discussion -> bug/problem fixing
 4. https://flowbite.com/icons/ -> as free icon provider
+5. https://ckeditor.com/ -> as free text editor
 
 ## Color Palette
 

@@ -42,9 +42,18 @@ func main() {
 	userHandler := handlers.NewUserHandler(userSvc)
 
 	authRouter := router.PathPrefix("/user").Subrouter()
-	authRouter.HandleFunc("/register", userHandler.Register).Methods("POST")
-	authRouter.HandleFunc("/login", userHandler.Login).Methods("POST")
-	authRouter.HandleFunc("/edit", userHandler.Edit).Methods("POST")
+	authRouter.HandleFunc("/register", userHandler.RegisterUserHandler).Methods("POST")
+	authRouter.HandleFunc("/login", userHandler.LoginUserHandler).Methods("POST")
+	authRouter.HandleFunc("/get", userHandler.GetUserHandler).Methods("GET")
+	authRouter.HandleFunc("/edit", userHandler.EditUserHandler).Methods("POST")
+
+	// Organization
+	orgRepo := repositories.NewOrganizationRepository(db)
+	orgSvc := services.NewOrganizationService(orgRepo)
+	orgHandler := handlers.NewOrganizationHandler(orgSvc)
+
+	orgRouter := router.PathPrefix("/org").Subrouter()
+	orgRouter.HandleFunc("/create", orgHandler.CreateOrganizationHandler).Methods("POST")
 
 	// Wrap the router with your CORS middleware so that every request goes through it.
 	handlerWithCORS := middleware.CORS(router)

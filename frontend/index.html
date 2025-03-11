@@ -67,7 +67,7 @@
               <input
                 type="file"
                 id="organization-photo"
-                name="organization-photo"
+                name="organizationPhoto"
                 class="hidden"
                 accept="image/*"
                 onchange="setPreviewPhoto(event, 'organization-photo-preview')"
@@ -76,7 +76,7 @@
 
             <input
               type="text"
-              name="organization_title"
+              name="organizationTitle"
               placeholder="Organization Title"
               class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
               pattern="^[a-zA-Z\s]+$"
@@ -89,7 +89,7 @@
               <label>Start Date</label>
               <input
                 type="date"
-                name="startDate"
+                name="organizationStartDate"
                 class="w-full cursor-pointer rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 required
               />
@@ -99,18 +99,18 @@
               <label>End Date</label>
               <input
                 type="date"
-                name="endDate"
+                name="organizationEndDate"
                 class="w-full cursor-pointer rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 required
               />
             </div>
 
             <div>
-              <label>Organization Descriptions</label>
+              <label>Organization Descriptions (Optional)</label>
               <textarea
                 id="editor"
                 placeholder="Enter descriptions..."
-                required
+                name="organizationDescriptions"
               ></textarea>
             </div>
 

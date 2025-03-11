@@ -38,7 +38,7 @@ func (h *PagesHandler) HomePage(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (h *PagesHandler) NotFound(w http.ResponseWriter, r *http.Request) {
+func (h *PagesHandler) NotFoundPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("HX-Reswap", "innerHTML")
 	w.Header().Set("HX-Retarget", "main")
 	utils.SendHTMLDocumentResponse(w, nil, "pages/not_found.html")

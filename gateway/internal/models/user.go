@@ -1,24 +1,24 @@
 package models
 
-type UserRegistration struct {
+type RegisterUser struct {
 	Name            string `form:"name"`
 	Email           string `form:"email"`
 	Password        string `form:"password"`
 	ConfirmPassword string `form:"confirmPassword"`
 }
 
-type ForwardUserRegistration struct {
+type ForwardRegisterUser struct {
 	Name     string
 	Email    string
 	Password string
 }
 
-type UserLogin struct {
+type LoginUser struct {
 	Email    string `form:"email"`
 	Password string `form:"password"`
 }
 
-type UserEdit struct {
+type EditUser struct {
 	Name         string `form:"name"`
 	Email        string `form:"email"`
 	ProfilePhoto string `form:"profile-photo"`

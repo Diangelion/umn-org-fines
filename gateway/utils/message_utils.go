@@ -6,7 +6,7 @@ var UnableProcess = "Unable to process the request."
 var ErrorOccured = "Unexpected error occured."
 var TryAgain = "Please try again later."
 
-func LoginRegisterErrorMessage(typeForm *string) string {
+func InvalidFormErrorMessage(typeForm *string) string {
 	return fmt.Sprintf("Please check again your %s form and try again.", *typeForm)
 }
 

@@ -11,12 +11,12 @@ import (
 	"net/http"
 )
 
-var cfg = config.LoadConfig()
+func ForwardRegisterUser(user models.ForwardRegisterUser) (*http.Response, error) {
+	cfg := config.LoadConfig()
 
-func ForwardUserRegistration(user models.ForwardUserRegistration) (*http.Response, error) {
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		log.Println("ForwardUserRegistration | Marshal error: ", err)
+		log.Println("ForwardRegisterUser | Marshal error: ", err)
 		return nil, errors.New("Unable to marshal user data")
 	}
 
@@ -28,10 +28,12 @@ func ForwardUserRegistration(user models.ForwardUserRegistration) (*http.Respons
 	return client.Post(registrationUrl, contentType, reqBody)
 }
 
-func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
+func ForwardLoginUser(user models.LoginUser) (*http.Response, error) {
+	cfg := config.LoadConfig()
+
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		log.Println("ForwardUserLogin | Marshal error: ", err)
+		log.Println("ForwardLoginUser | Marshal error: ", err)
 		return nil, errors.New("Unable to marshal user data")
 	}
 
@@ -43,35 +45,40 @@ func ForwardUserLogin(user models.UserLogin) (*http.Response, error) {
 	return client.Post(loginUrl, contentType, reqBody)
 }
 
-func ForwardUserGet(userId string) (*http.Response, error) {
-	registrationUrl := fmt.Sprintf("%s/user/edit", cfg.BackendURL)
+func ForwardGetUser(userId string) (*http.Response, error) {
+	// cfg := config.LoadConfig()
 
-	// Create a new HTTP request with the JSON data
-	req, err := http.NewRequest("GET", registrationUrl, nil)
-	if err != nil {
-		log.Println("ForwardUserGet | Create request error: ", err)
-		return nil, errors.New("Unable to create HTTP request.")
-	}
+	// registrationUrl := fmt.Sprintf("%s/user/get", cfg.BackendURL)
 
-	// Set the Authorization header (e.g., using a Bearer token)
-	req.Header.Set("Authorization", userId)
+	// // Create a new HTTP request with the JSON data
+	// req, err := http.NewRequest("GET", registrationUrl, nil)
+	// if err != nil {
+	// 	log.Println("ForwardGetUser | Create request error: ", err)
+	// 	return nil, errors.New("Unable to create HTTP request.")
+	// }
 
-	// Send the request using http.Client
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Println("ForwardUserGet | Send request error: ", err)
-		return nil, errors.New("Unable to send HTTP request.")
-	}
+	// // Set the Authorization header (e.g., using a Bearer token)
+	// req.Header.Set("Authorization", userId)
 
-	// Return the response
-	return resp, nil
+	// // Send the request using http.Client
+	// client := &http.Client{}
+	// resp, err := client.Do(req)
+	// if err != nil {
+	// 	log.Println("ForwardGetUser | Send request error: ", err)
+	// 	return nil, errors.New("Unable to send HTTP request.")
+	// }
+
+	// // Return the response
+	// return resp, nil
+	return nil, nil
 }
 
-func ForwardUserEdit(user models.UserEdit, userId string) (*http.Response, error) {
+func ForwardEditUser(user models.EditUser, userId string) (*http.Response, error) {
+	cfg := config.LoadConfig()
+
 	jsonData, err := json.Marshal(user)
 	if err != nil {
-		log.Println("ForwardUserEdit | Marshal error: ", err)
+		log.Println("ForwardEditUser | Marshal error: ", err)
 		return nil, errors.New("Unable to marshal user data")
 	}
 
@@ -82,7 +89,7 @@ func ForwardUserEdit(user models.UserEdit, userId string) (*http.Response, error
 	// Create a new HTTP request with the JSON data
 	req, err := http.NewRequest("POST", registrationUrl, reqBody)
 	if err != nil {
-		log.Println("ForwardUserEdit | Create request error: ", err)
+		log.Println("ForwardEditUser | Create request error: ", err)
 		return nil, errors.New("Unable to create HTTP request.")
 	}
 
@@ -95,7 +102,7 @@ func ForwardUserEdit(user models.UserEdit, userId string) (*http.Response, error
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Println("ForwardUserEdit | Send request error: ", err)
+		log.Println("ForwardEditUser | Send request error: ", err)
 		return nil, errors.New("Unable to send HTTP request.")
 	}
 
