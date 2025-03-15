@@ -51,3 +51,7 @@ func SendAuthPage(w http.ResponseWriter, baseURL string, fileName string) {
 	document := getAuthPage(baseURL)
 	SendHTMLDocumentResponse(w, document, fileName)
 }
+
+func SendAuthPartial(w http.ResponseWriter, document any, fileName string) {
+	SendHTMLDocumentResponse(w, document, fileName)
+}

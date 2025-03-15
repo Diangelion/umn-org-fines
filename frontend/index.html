@@ -35,116 +35,19 @@
   </head>
 
   <body>
-    <main class="min-h-screen w-full bg-gray-300 p-5">
-      <div class="flex min-h-[calc(100vh-2.5rem)] items-center justify-center">
-        <div
-          id="create-organization-container"
-          class="mx-auto w-full rounded-lg bg-neutral-100 p-5 shadow-md md:w-[60%]"
-        >
-          <form class="space-y-4">
-            <div>
-              <label>Organization Photo</label>
-              <div
-                class="border-3 relative mx-auto flex aspect-[1] h-1/2 w-1/2 items-center justify-center rounded-full border-dashed border-gray-700 p-5 text-center md:h-full md:w-1/3"
-              >
-                <img
-                  id="organization-photo-preview"
-                  class="absolute left-0 top-0 z-[0] aspect-[1] w-full rounded-full object-cover"
-                  alt="Organization Photo Preview"
-                />
-                <label for="organization-photo" class="cursor-pointer">
-                  <div>
-                    <p><strong>1:1 aspect ratio</strong></p>
-                    <p>Recommended size: <strong>300x300 pixels</strong>.</p>
-                  </div>
-                  <img
-                    src="./icons/camera.svg"
-                    class="absolute bottom-[10%] right-[20%] z-[1]"
-                    alt="Camera Icon"
-                  />
-                </label>
-              </div>
-              <input
-                type="file"
-                id="organization-photo"
-                name="organizationPhoto"
-                class="hidden"
-                accept="image/*"
-                onchange="setPreviewPhoto(event, 'organization-photo-preview')"
-              />
-            </div>
-
-            <input
-              type="text"
-              name="organizationTitle"
-              placeholder="Organization Title"
-              class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              pattern="^[a-zA-Z\s]+$"
-              title="Only letters and spaces allowed"
-              autocomplete="on"
-              required
-            />
-
-            <div>
-              <label>Start Date</label>
-              <input
-                type="date"
-                name="organizationStartDate"
-                class="w-full cursor-pointer rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                required
-              />
-            </div>
-
-            <div>
-              <label>End Date</label>
-              <input
-                type="date"
-                name="organizationEndDate"
-                class="w-full cursor-pointer rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                required
-              />
-            </div>
-
-            <div>
-              <label>Organization Descriptions (Optional)</label>
-              <textarea
-                id="editor"
-                placeholder="Enter descriptions..."
-                name="organizationDescriptions"
-              ></textarea>
-            </div>
-
-            <!~~ Submit Button ~~>
-            <div class="flex h-fit w-full items-center justify-end gap-x-2">
-              <a
-                class="w-1/3 cursor-pointer rounded bg-red-700 py-2 text-center font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
-                href="/"
-              >
-                Cancel
-              </a>
-              <button
-                type="submit"
-                class="w-1/3 cursor-pointer rounded bg-gray-700 py-2 font-semibold text-neutral-100 transition hover:opacity-85 md:w-1/4"
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </main>
+    <main class="min-h-screen w-full bg-gray-300 p-5"></main>
     <!~~ Modules ~~>
     <script src="./scripts/modules/auth.js"></script>
     <script src="./scripts/modules/storage.js"></script>
 
     <!~~ Script ~~>
-    <!-- <script src="./scripts/routing.js"></script>
+    <script src="./scripts/routing.js"></script>
     <script src="./scripts/scripts.js"></script>
-    <script src="./scripts/entry.js"></script> -->
+    <script src="./scripts/entry.js"></script>
     <script src="./scripts/profile.js"></script>
     <script src="./scripts/home.js"></script>
 
-    <!~~ Library ~~>
+    <!-- <!~~ Library ~~>
     <script src="https://cdn.ckeditor.com/ckeditor5/44.3.0/ckeditor5.umd.js"></script>
     <script>
       const { ClassicEditor, Essentials, Bold, Italic, Font, Paragraph } =
@@ -168,6 +71,6 @@
       }).catch((error) => {
         console.error(error);
       });
-    </script>
+    </script> -->
   </body>
 </html>

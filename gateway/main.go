@@ -32,19 +32,19 @@ func main() {
 	router := mux.NewRouter().StrictSlash(false)
 	jwt := middleware.NewJWT(db, cfg)
 	pagesHandler := handlers.NewPagesHandler(cfg)
+	partialHandler := handlers.NewPartialHandler(cfg)
 
     // 1. Auth API Routes (should come first as they're most specific)
-	// User Profile
+	// Public User Routes
     authRouter := router.PathPrefix("/auth").Subrouter()
     authRouter.HandleFunc("/register", handlers.RegisterUserHandler).Methods("POST")
     authRouter.HandleFunc("/login", handlers.LoginUserHandler).Methods("POST")
-
+	// Protected User Routes
 	protectedAuthRouter := authRouter.NewRoute().Subrouter()
 	protectedAuthRouter.Use(jwt.ProtectedMiddleware)
 	protectedAuthRouter.HandleFunc("/user", handlers.GetUserHandler).Methods("GET")
 	protectedAuthRouter.HandleFunc("/edit", handlers.EditUserHandler).Methods("POST")
-
-	// Organization
+	// Protected Organization Routes
 	orgRouter := router.PathPrefix("/organization").Subrouter()
 	orgRouter.Use(jwt.ProtectedMiddleware)
 	// orgRouter.HandleFunc("/get-all", handlers.GetListOrganizations).Methods("GET")
@@ -52,10 +52,16 @@ func main() {
 	orgRouter.HandleFunc("/create", handlers.CreateOrganizationHandler).Methods("POST")
 	// orgRouter.HandleFunc("/join", handlers.JoinOrganization).Methods("POST")
 
-    // 2. Protected Routes (pages requiring authentication)
+    // 2. Protected Routes (pages/partial document requiring authentication)
+	// Pages
     protectedRouter := router.NewRoute().Subrouter()
     protectedRouter.Use(jwt.ProtectedMiddleware)
     protectedRouter.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
+	// Partial
+	partialRouter := router.PathPrefix("/partial").Subrouter()
+	partialRouter.Use(jwt.ProtectedMiddleware)
+	partialRouter.HandleFunc("/sidebar-profile", partialHandler.SidebarProfilePartial).Methods("GET")
+	partialRouter.HandleFunc("/sidebar-organization-list", partialHandler.SidebarOrganizationListPartial).Methods("GET")
 
     // 3. Public Routes (with redirect middleware)
     publicRouter := router.NewRoute().Subrouter()

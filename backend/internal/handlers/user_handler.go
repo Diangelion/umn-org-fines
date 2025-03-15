@@ -4,6 +4,7 @@ import (
 	"backend/internal/models"
 	"backend/internal/services"
 	"backend/utils"
+	"encoding/json"
 	"log"
 	"net/http"
 )
@@ -62,29 +63,29 @@ func (h *UserHandler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
-    // userId := r.Header.Get("Authorization")
+    userId := r.Header.Get("Authorization")
 
-    // if userId == "" {
-    //     log.Println("Get | User id not found in Authorization")
-    //     utils.SendJSONResponse(w, http.StatusBadRequest, "User id not found in request header.", nil)
-    //     return
-    // }
+    if userId == "" {
+        log.Println("GetUserHandler | User id not found in Authorization")
+        utils.SendJSONResponse(w, http.StatusBadRequest, "User id not found in request header.", nil)
+        return
+    }
 
-    // data, err := h.service.GetUserService(userId)
-    // if err != nil {
-    // log.Println("Get | Get user error: ", err)
-    //     utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
-    //     return
-    // }
+    data, err := h.service.GetUserService(userId)
+    if err != nil {
+    log.Println("GetUserHandler | Get user error: ", err)
+        utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
+        return
+    }
 
-    // jsonData, err := json.Marshal(data)
-    // if err != nil {
-    //     log.Println("Get | Marshaling user data to JSON error: ", err)
-    //     utils.SendJSONResponse(w, http.StatusInternalServerError, "Error marshaling user data to JSON.", nil)
-    //     return
-    // }
+    jsonData, err := json.Marshal(data)
+    if err != nil {
+        log.Println("Get | Marshaling user data to JSON error: ", err)
+        utils.SendJSONResponse(w, http.StatusInternalServerError, "Error marshaling user data to JSON.", nil)
+        return
+    }
 
-    // utils.SendJSONResponse(w, http.StatusOK, "User found.", jsonData)
+    utils.SendJSONResponse(w, http.StatusOK, "User found.", jsonData)
 }
 
 

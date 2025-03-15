@@ -16,6 +16,20 @@ func NewOrganizationHandler(service *services.OrganizationService) *Organization
     return &OrganizationHandler{service}
 }
 
+func (h *OrganizationHandler) GetListOrganizationHandler(w http.ResponseWriter, r *http.Request) {
+    userId := r.Header.Get("Authorization")
+
+    // Perform registration
+    listOrganization, err := h.service.GetListOrganizationService(userId);
+    if err != nil {
+        log.Println("GetListOrganizationHandler | Get list organization service error: ", err)
+        utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
+        return
+    }
+
+    utils.SendJSONResponse(w, http.StatusOK, "List organization has been successfully gained.", listOrganization)
+}
+
 func (h *OrganizationHandler) CreateOrganizationHandler(w http.ResponseWriter, r *http.Request) {
 	userId := r.Header.Get("Authorization")
     var org *models.CreateOrganization
@@ -29,7 +43,7 @@ func (h *OrganizationHandler) CreateOrganizationHandler(w http.ResponseWriter, r
 
     // Perform registration
     if err := h.service.CreateOrganizationService(org, userId); err != nil {
-        log.Println("CreateOrganizationHandler | Registration service error: ", err)
+        log.Println("CreateOrganizationHandler | Create organization service error: ", err)
 
         // Handle duplicate email specifically, differentiate with response status code
         var dupErr *models.DuplicateEmailError

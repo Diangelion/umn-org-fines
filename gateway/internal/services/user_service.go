@@ -46,31 +46,30 @@ func ForwardLoginUser(user models.LoginUser) (*http.Response, error) {
 }
 
 func ForwardGetUser(userId string) (*http.Response, error) {
-	// cfg := config.LoadConfig()
+	cfg := config.LoadConfig()
 
-	// registrationUrl := fmt.Sprintf("%s/user/get", cfg.BackendURL)
+	registrationUrl := fmt.Sprintf("%s/user/get", cfg.BackendURL)
 
-	// // Create a new HTTP request with the JSON data
-	// req, err := http.NewRequest("GET", registrationUrl, nil)
-	// if err != nil {
-	// 	log.Println("ForwardGetUser | Create request error: ", err)
-	// 	return nil, errors.New("Unable to create HTTP request.")
-	// }
+	// Create a new HTTP request with the JSON data
+	req, err := http.NewRequest("GET", registrationUrl, nil)
+	if err != nil {
+		log.Println("ForwardGetUser | Create request error: ", err)
+		return nil, errors.New("Unable to create HTTP request.")
+	}
 
-	// // Set the Authorization header (e.g., using a Bearer token)
-	// req.Header.Set("Authorization", userId)
+	// Set the Authorization header (e.g., using a Bearer token)
+	req.Header.Set("Authorization", userId)
 
-	// // Send the request using http.Client
-	// client := &http.Client{}
-	// resp, err := client.Do(req)
-	// if err != nil {
-	// 	log.Println("ForwardGetUser | Send request error: ", err)
-	// 	return nil, errors.New("Unable to send HTTP request.")
-	// }
+	// Send the request using http.Client
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("ForwardGetUser | Send request error: ", err)
+		return nil, errors.New("Unable to send HTTP request.")
+	}
 
-	// // Return the response
-	// return resp, nil
-	return nil, nil
+	// Return the response
+	return resp, nil
 }
 
 func ForwardEditUser(user models.EditUser, userId string) (*http.Response, error) {

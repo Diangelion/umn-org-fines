@@ -2,18 +2,15 @@
   id="home-container"
   class="mx-auto flex h-[calc(100vh-2.5rem)] flex-col-reverse gap-x-10 md:flex-row md:justify-center"
 >
-  <!-- Sidebar -->
+  <!~~ Sidebar ~~>
   <div
     class="flex w-full items-center justify-center p-4 md:block md:w-[35%] md:justify-start lg:w-[25%]"
   >
-    <a href="/profile" class="basis-full">
-      <div
-        class="flex cursor-pointer items-center justify-center rounded-[0.5rem] p-2 hover:shadow-sm md:w-full md:justify-start md:space-x-4"
-      >
-        <div class="h-12 w-12 rounded-full bg-gray-700"></div>
-        <span class="hidden text-gray-700 md:block">Name</span>
-      </div>
-    </a>
+    <!~~ Sidebar Profile ~~>
+    <div
+      hx-get="{{ .BaseURL }}/partial/sidebar-profile"
+      hx-swap="outerHTML"
+    ></div>
 
     <hr class="my-4 hidden border-gray-700 md:block" />
 
@@ -34,198 +31,10 @@
       />
     </div>
 
-    <ul
-      id="organization-list"
-      class="md:rounded-t-0 fixed bottom-[6rem] hidden max-h-[15rem] w-[50%] overflow-y-auto rounded-b-[0.5rem] rounded-t-[0.5rem] bg-neutral-100 shadow-[0_0_7.5px_rgba(0,0,0)] md:static md:mb-1 md:w-auto md:bg-inherit md:shadow-sm"
-    >
-      <li class="py-1 pl-4 pr-2 text-gray-400">No organization joined</li>
-    </ul>
-
-    <!-- <ul
-            id="organization-list"
-            class="md:rounded-t-0 fixed bottom-[6rem] hidden max-h-[15rem] w-[50%] overflow-y-auto rounded-b-[0.5rem] rounded-t-[0.5rem] bg-neutral-100 shadow-[0_0_7.5px_rgba(0,0,0)] md:static md:mb-1 md:w-auto md:bg-inherit md:shadow-sm"
-          >
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-            <li class="cursor-pointer py-1">
-              <div
-                class="flex items-center gap-x-2 pl-4 pr-2 hover:text-neutral-100"
-              >
-                <div class="aspect-[1/1] h-5 w-5 rounded-full bg-black"></div>
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                  ssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </p>
-              </div>
-            </li>
-          </ul> -->
+    <div
+      hx-get="{{ .BaseURL }}/partial/sidebar-organization-list"
+      hx-swap="outerHTML"
+    ></div>
 
     <div
       class="basis-full cursor-pointer rounded-[0.5em] px-2 py-1 hover:shadow-sm md:mb-1 md:justify-between"

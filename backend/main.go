@@ -53,6 +53,7 @@ func main() {
 	orgHandler := handlers.NewOrganizationHandler(orgSvc)
 
 	orgRouter := router.PathPrefix("/org").Subrouter()
+	orgRouter.HandleFunc("/get-list", orgHandler.GetListOrganizationHandler).Methods("GET")
 	orgRouter.HandleFunc("/create", orgHandler.CreateOrganizationHandler).Methods("POST")
 
 	// Wrap the router with your CORS middleware so that every request goes through it.
