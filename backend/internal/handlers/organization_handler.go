@@ -18,16 +18,16 @@ func NewOrganizationHandler(service *services.OrganizationService) *Organization
 
 func (h *OrganizationHandler) GetListOrganizationHandler(w http.ResponseWriter, r *http.Request) {
     userId := r.Header.Get("Authorization")
+    orgList := &models.GetListOrganization{}
 
     // Perform registration
-    listOrganization, err := h.service.GetListOrganizationService(userId);
-    if err != nil {
+    if err := h.service.GetListOrganizationService(orgList, userId); err != nil {
         log.Println("GetListOrganizationHandler | Get list organization service error: ", err)
         utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
         return
     }
 
-    utils.SendJSONResponse(w, http.StatusOK, "List organization has been successfully gained.", listOrganization)
+    utils.SendJSONResponse(w, http.StatusOK, "List organization has been successfully gained.", orgList)
 }
 
 func (h *OrganizationHandler) CreateOrganizationHandler(w http.ResponseWriter, r *http.Request) {

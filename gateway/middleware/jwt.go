@@ -15,7 +15,7 @@ import (
 )
 
 type contextKey string
-const userIdKey contextKey = "userId"
+const UserIdKey contextKey = "userId"
 
 type JWTMiddleware struct {
     DB *sql.DB
@@ -139,7 +139,7 @@ func (m *JWTMiddleware) ProtectedMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), userIdKey, userId)
+		ctx := context.WithValue(r.Context(), UserIdKey, userId)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

@@ -75,25 +75,24 @@ func (r *UserRepository) LoginUserRepository(user *models.LoginUser) (string, er
     return userId, nil
 }
 
-func (r *UserRepository) GetUserRepository(userId string) (*models.EditUser, error) {
+func (r *UserRepository) GetUserRepository(user *models.EditUser, userId string) error {
     query := `
         SELECT name, email, profile_photo, cover_photo
         FROM users
         WHERE id = $1
     `
 
-    var user models.EditUser
     if err := r.db.QueryRow(query, userId).Scan(&user.Name, &user.Email, &user.ProfilePhoto, &user.CoverPhoto); err != nil {
         if err == sql.ErrNoRows {
             // Handle the case where no rows were found
             log.Printf("GetUserRepository | Get user error: %v, with id: %s\n", err, userId)
-            return nil, errors.New("Unable to get user (not found).")
+            return errors.New("Unable to get user (not found).")
         }
         log.Println("GetUserRepository | Error getting user: ", err)
-        return nil, errors.New("Unable to get user.")
+        return errors.New("Unable to get user.")
     }
 
-    return &user, nil
+    return nil
 }
 
 

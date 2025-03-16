@@ -15,31 +15,31 @@ func NewOrganizationRepository(db *sql.DB) *OrganizationRepository {
     return &OrganizationRepository{db}
 }
 
-func (r *OrganizationRepository) GetListOrganizationRepository(userId string) (*models.GetListOrganization, error) {
+func (r *OrganizationRepository) GetListOrganizationRepository(orgList *models.GetListOrganization, userId string) error {
     query := `
         SELECT org.name
         FROM organizations org
-        JOIN user_organization usr_org ON org.id = usr_org.organization_id
-        WHERE usr_org.user_id = $1
+        JOIN user_organizations usr_orgs ON org.id = usr_orgs.organization_id
+        WHERE usr_orgs.user_id = $1
     `
 
     // Execute the query
     rows, err := r.db.Query(query, userId)
     if err != nil {
         log.Println("GetListOrganizationRepository | Error querying database:", err)
-        return nil, errors.New("Unable to get list organization.")
+        return errors.New("Unable to get list organization.")
     }
     defer rows.Close() // Ensure rows are closed after iteration
 
-    // Initialize the slice to hold organization names
-    var orgList models.GetListOrganization
+    // Always initialize as an empty slice to avoid nil
+    orgList.List = []string{}
 
     // Iterate over the rows and append each organization name to the slice
     for rows.Next() {
         var orgName string
         if err := rows.Scan(&orgName); err != nil {
             log.Println("GetListOrganizationRepository | Error scanning row:", err)
-            return nil, errors.New("Unable to process list organization.")
+            return errors.New("Unable to process list organization.")
         }
         orgList.List = append(orgList.List, orgName)
     }
@@ -47,16 +47,10 @@ func (r *OrganizationRepository) GetListOrganizationRepository(userId string) (*
     // Check for errors after iteration
     if err := rows.Err(); err != nil {
         log.Println("GetListOrganizationRepository | Error after iterating rows:", err)
-        return nil, errors.New("Unable to get list organization.")
+        return errors.New("Unable to get list organization.")
     }
 
-    // If no rows were found, return an error
-    if len(orgList.List) == 0 {
-        log.Printf("GetListOrganizationRepository | No organizations found for user ID: %s\n", userId)
-        return nil, errors.New("No organizations found.")
-    }
-
-    return &orgList, nil
+    return nil
 }
 
 

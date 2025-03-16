@@ -2,7 +2,11 @@
   <div
     class="flex cursor-pointer items-center justify-center rounded-[0.5rem] p-2 hover:shadow-sm md:w-full md:justify-start md:space-x-4"
   >
-    <div class="h-12 w-12 rounded-full bg-gray-700"></div>
+    <img
+      src="{{ .ProfilePhoto }}"
+      class="h-12 w-12 rounded-full bg-gray-700"
+      alt="Profile Photo"
+    />
     <span class="hidden text-gray-700 md:block">{{ .Name }}</span>
   </div>
 </a>

@@ -13,8 +13,8 @@ func NewOrganizationService(repo *repositories.OrganizationRepository) *Organiza
     return &OrganizationService{repo}
 }
 
-func (s *OrganizationService) GetListOrganizationService(userId string) (*models.GetListOrganization, error) {
-    return s.repo.GetListOrganizationRepository(userId)
+func (s *OrganizationService) GetListOrganizationService(orgList *models.GetListOrganization, userId string) error {
+    return s.repo.GetListOrganizationRepository(orgList, userId)
 }
 
 func (s *OrganizationService) CreateOrganizationService(org *models.CreateOrganization, userId string) error {

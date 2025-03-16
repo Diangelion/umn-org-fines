@@ -1,7 +1,7 @@
 package models
 
 type GetListOrganization struct {
-	List []string
+	List []string `json:"list"`
 }
 
 type CreateOrganization struct {

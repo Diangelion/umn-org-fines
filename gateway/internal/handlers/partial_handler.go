@@ -5,6 +5,7 @@ import (
 	"gateway/config"
 	"gateway/internal/models"
 	"gateway/internal/services"
+	"gateway/middleware"
 	"gateway/utils"
 	"log"
 	"net/http"
@@ -19,7 +20,7 @@ func NewPartialHandler(cfg *config.Config) *PartialHandler {
 }
 
 func (h *PartialHandler) SidebarProfilePartial(w http.ResponseWriter, r *http.Request) {
-	userId, ok := r.Context().Value("userId").(string)
+	userId, ok := r.Context().Value(middleware.UserIdKey).(string)
 	if !ok {
 		log.Println("SidebarProfilePartial | Context userId not found")
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
@@ -50,16 +51,16 @@ func (h *PartialHandler) SidebarProfilePartial(w http.ResponseWriter, r *http.Re
 	}
 
 	document := models.EditUser{
-		Name: jsonResponse.Data["Name"].(string),
-		Email: jsonResponse.Data["Email"].(string),
-		ProfilePhoto: jsonResponse.Data["ProfilePhoto"].(string),
-		CoverPhoto: jsonResponse.Data["CoverPhoto"].(string),
+		Name: jsonResponse.Data["name"].(string),
+		Email: jsonResponse.Data["email"].(string),
+		ProfilePhoto: jsonResponse.Data["profile_photo"].(string),
+		CoverPhoto: jsonResponse.Data["cover_photo"].(string),
 	}
 	utils.SendAuthPartial(w, document, "partials/sidebar_profile.html")
 }
 
 func (h *PartialHandler) SidebarOrganizationListPartial(w http.ResponseWriter, r *http.Request) {
-	userId, ok := r.Context().Value("userId").(string)
+	userId, ok := r.Context().Value(middleware.UserIdKey).(string)
 	if !ok {
 		log.Println("SidebarOrganizationListPartial | Context userId not found")
 		utils.SendAlert(w, "Error", utils.GetGeneralErrorMessage(), fileName)
@@ -89,5 +90,13 @@ func (h *PartialHandler) SidebarOrganizationListPartial(w http.ResponseWriter, r
 		return
 	}
 
-	// utils.SendAuthPartial(w, document, "partials/sidebar_profile.html")
+	listData, ok := jsonResponse.Data["list"].([]string)
+	if !ok {
+		listData = []string{} // Ensure it's an empty slice, not nil
+	}
+
+	document := models.OrganizationList{
+		List: listData,
+	}
+	utils.SendAuthPartial(w, document, "partials/sidebar_organization_list.html")
 }

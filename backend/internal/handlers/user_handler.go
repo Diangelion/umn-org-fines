@@ -4,7 +4,6 @@ import (
 	"backend/internal/models"
 	"backend/internal/services"
 	"backend/utils"
-	"encoding/json"
 	"log"
 	"net/http"
 )
@@ -18,17 +17,18 @@ func NewUserHandler(service *services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
-    var user *models.RegisterUser
+    // Initialize the user variable
+    var user models.RegisterUser
 
     // Assign request body to user for validation
-    if err := utils.DecodeRequestBody(r, user); err != nil {
+    if err := utils.DecodeRequestBody(r, &user); err != nil {
         log.Println("RegisterUserHandler | Decode request error: ", err)
         utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload.", nil)
         return
     }
 
     // Perform registration
-    if err := h.service.RegisterUserService(user); err != nil {
+    if err := h.service.RegisterUserService(&user); err != nil {
         log.Println("RegisterUserHandler | Registration service error: ", err)
 
         // Handle duplicate email specifically, differentiate with response status code
@@ -45,7 +45,7 @@ func (h *UserHandler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
     var user models.LoginUser
 
     // Assign request body to user for validation
-    if err := utils.DecodeRequestBody(r, user); err != nil {
+    if err := utils.DecodeRequestBody(r, &user); err != nil {
         log.Println("LoginUserHandler | Decode request error: ", err)
         utils.SendJSONResponse(w, http.StatusBadRequest, "Invalid JSON payload.", nil)
         return
@@ -71,21 +71,14 @@ func (h *UserHandler) GetUserHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    data, err := h.service.GetUserService(userId)
-    if err != nil {
+    var user models.EditUser
+    if err := h.service.GetUserService(&user, userId); err != nil {
     log.Println("GetUserHandler | Get user error: ", err)
         utils.SendJSONResponse(w, http.StatusInternalServerError, err.Error(), nil)
         return
     }
 
-    jsonData, err := json.Marshal(data)
-    if err != nil {
-        log.Println("Get | Marshaling user data to JSON error: ", err)
-        utils.SendJSONResponse(w, http.StatusInternalServerError, "Error marshaling user data to JSON.", nil)
-        return
-    }
-
-    utils.SendJSONResponse(w, http.StatusOK, "User found.", jsonData)
+    utils.SendJSONResponse(w, http.StatusOK, "User found.", user)
 }
 
 

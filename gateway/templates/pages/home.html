@@ -2,12 +2,13 @@
   id="home-container"
   class="mx-auto flex h-[calc(100vh-2.5rem)] flex-col-reverse gap-x-10 md:flex-row md:justify-center"
 >
-  <!~~ Sidebar ~~>
+  <!-- Sidebar -->
   <div
     class="flex w-full items-center justify-center p-4 md:block md:w-[35%] md:justify-start lg:w-[25%]"
   >
-    <!~~ Sidebar Profile ~~>
+    <!-- Sidebar Profile -->
     <div
+      hx-trigger="load once"
       hx-get="{{ .BaseURL }}/partial/sidebar-profile"
       hx-swap="outerHTML"
     ></div>
@@ -32,6 +33,7 @@
     </div>
 
     <div
+      hx-trigger="load once"
       hx-get="{{ .BaseURL }}/partial/sidebar-organization-list"
       hx-swap="outerHTML"
     ></div>

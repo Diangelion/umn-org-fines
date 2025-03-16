@@ -58,8 +58,7 @@ func main() {
     protectedRouter.Use(jwt.ProtectedMiddleware)
     protectedRouter.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
 	// Partial
-	partialRouter := router.PathPrefix("/partial").Subrouter()
-	partialRouter.Use(jwt.ProtectedMiddleware)
+	partialRouter := protectedRouter.PathPrefix("/partial").Subrouter()
 	partialRouter.HandleFunc("/sidebar-profile", partialHandler.SidebarProfilePartial).Methods("GET")
 	partialRouter.HandleFunc("/sidebar-organization-list", partialHandler.SidebarOrganizationListPartial).Methods("GET")
 

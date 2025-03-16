@@ -18,6 +18,6 @@ type UserId struct {
 type EditUser struct {
 	Name         string `json:"name"`
 	Email        string `json:"email"`
-	ProfilePhoto string `json:"profilephoto"`
-	CoverPhoto   string `json:"coverphoto"`
+	ProfilePhoto string `json:"profile_photo"`
+	CoverPhoto   string `json:"cover_photo"`
 }

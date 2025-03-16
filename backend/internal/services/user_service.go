@@ -23,7 +23,7 @@ func (s *UserService) RegisterUserService(user *models.RegisterUser) error {
         log.Println("RegisterUserService | Hash password error: ", err)
         return errors.New("Failed to hash password.")
     }
-    user.Password = hashedPassword // Store in user model
+    (*user).Password = hashedPassword // Store in user model
 
     // Create the user
     return s.repo.RegisterUserRepository(user)
@@ -33,8 +33,8 @@ func (s *UserService) LoginUserService(user *models.LoginUser) (string, error) {
     return s.repo.LoginUserRepository(user)
 }
 
-func (s *UserService) GetUserService(userId string) (*models.EditUser, error) {
-    return s.repo.GetUserRepository(userId)
+func (s *UserService) GetUserService(user *models.EditUser, userId string) error {
+    return s.repo.GetUserRepository(user, userId)
 }
 
 func (s *UserService) EditUserService(user *models.EditUser, userId string) error {

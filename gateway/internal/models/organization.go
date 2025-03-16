@@ -1,5 +1,9 @@
 package models
 
+type OrganizationList struct {
+	List []string
+}
+
 type CreateOrganization struct {
 	OrganizationPhoto        string `form:"organizationPhoto"`
 	OrganizationTitle        string `form:"organizationTitle"`
