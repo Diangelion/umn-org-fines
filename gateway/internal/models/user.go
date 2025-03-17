@@ -24,3 +24,9 @@ type EditUser struct {
 	ProfilePhoto string `form:"profile-photo"`
 	CoverPhoto   string `form:"cover-photo"`
 }
+
+type User struct {
+	Profile            EditUser
+	Organizations      []CreateOrganization
+	TotalOrganizations int
+}

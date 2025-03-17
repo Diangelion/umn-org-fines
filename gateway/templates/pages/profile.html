@@ -3,19 +3,31 @@
   class="mx-auto flex min-h-screen w-full flex-col items-center justify-center gap-y-10 md:w-3/4"
 >
   <div class="h-fit w-full rounded bg-neutral-100 md:pb-5">
-    <div class="aspect-[3/1] rounded-t bg-gray-700"></div>
+    <!-- Cover Photo -->
+    <img
+      src="{{ .Profile.CoverPhoto }}"
+      class="aspect-[3/1] rounded-t"
+      alt="Cover Photo"
+    />
     <div class="mt-[-1.5rem] flex h-fit w-full gap-x-2 p-2 md:px-5">
-      <div
-        class="h-[6rem] w-[6rem] rounded-full bg-gray-700 md:h-[10rem] md:w-[10rem]"
-      ></div>
+      <!-- Profile Photo -->
+      <img
+        src="{{ .Profile.ProfilePhoto }}"
+        class="h-[6rem] w-[6rem] rounded-full md:h-[10rem] md:w-[10rem]"
+        alt="Profile Photo"
+      />
       <div
         class="mr-auto flex w-fit flex-col gap-y-[0.2rem] self-end text-white"
       >
-        <p class="ml-[0.2rem] bg-gray-700 font-semibold md:text-2xl">
-          Bryan Richie
+        <!-- Name -->
+        <p class="ml-[0.2rem] font-semibold md:text-2xl">{{ .Profile.Name }}</p>
+
+        <!-- Groups -->
+        <p class="ml-[0.2rem] text-xs md:text-xl">
+          {{ .TotalOrganizations }} organizations
         </p>
-        <p class="ml-[0.2rem] bg-gray-700 text-xs md:text-xl">2 groups</p>
-        <div class="relative z-[0] flex bg-gray-700">
+
+        <!-- <div class="relative z-[0] flex bg-gray-700">
           <div
             class="relative top-0 h-[1.5rem] w-[1.5rem] rounded-full bg-white shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
           ></div>
@@ -37,6 +49,34 @@
               alt="More Icon"
             />
           </div>
+        </div> -->
+
+        <!-- Organizations -->
+        <div class="relative z-[0] flex">
+          {{ if gt (len .Organizations) 0 }} {{ range $index, $org :=
+          .Organizations }} {{ if lt $index 5 }}
+          <!-- Organization Photo -->
+          <div
+            class="relative {{ if gt $index 0 }}left-[-0.8rem]{{ end }} z-[{{ sub 0 $index }}]"
+          >
+            <img
+              src="{{ $org.OrganizationPhoto }}"
+              class="h-[1.5rem] w-[1.5rem] rounded-full shadow-[0_0_1px_rgba(0,0,0)] md:h-[2.5rem] md:w-[2.5rem]"
+              alt="{{ $org.OrganizationTitle }} Photo"
+            />
+
+            <!-- Show "more" overlay on the 5th item if there are more than 5 organizations -->
+            {{ if and (eq $index 4) (gt (len $.Organizations) 5) }}
+            <div
+              class="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-60"
+            >
+              <span class="text-xs font-medium text-white md:text-sm"
+                >+{{ sub (len $.Organizations) 5 }}</span
+              >
+            </div>
+            {{ end }}
+          </div>
+          {{ end }} {{ end }} {{ end }}
         </div>
       </div>
 
@@ -51,6 +91,7 @@
     </div>
   </div>
 
+  <!-- Form -->
   <div
     id="edit-profile-form"
     class="h-fit w-full rounded bg-neutral-100 p-6 shadow-md"
@@ -70,6 +111,7 @@
           class="border-3 relative flex aspect-[3/1] items-center justify-center border-dashed border-gray-700 p-5 text-center align-middle md:mx-auto md:h-3/4 md:w-3/4"
         >
           <img
+            src="{{ .Profile.CoverPhoto }}"
             id="cover-photo-preview"
             class="absolute left-0 top-0 z-[0] aspect-[3/1] w-full object-cover"
             alt="Cover Photo Preview"
@@ -102,6 +144,7 @@
           class="border-3 relative mx-auto flex aspect-[1] h-1/2 w-1/2 items-center justify-center rounded-full border-dashed border-gray-700 p-5 text-center md:h-full md:w-1/3"
         >
           <img
+            src="{{ .Profile.ProfilePhoto }}"
             id="profile-photo-preview"
             class="absolute left-0 top-0 z-[0] aspect-[1] w-full rounded-full object-cover"
             alt="Profile Photo Preview"
@@ -138,6 +181,7 @@
         pattern="^[a-zA-Z\s]+$"
         title="Only letters and spaces allowed"
         autocomplete="on"
+        value="{{ .Profile.Name }}"
       />
 
       <!-- Email -->
@@ -149,6 +193,7 @@
         class="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
         title="Please enter a valid email address (e.g., user@example.com)"
         autocomplete="on"
+        value="{{ .Profile.Email }}"
       />
 
       <!-- Submit Button -->

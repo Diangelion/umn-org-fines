@@ -36,7 +36,7 @@ func getAlert(title string, errMsg string) any {
 	}
 }
 
-func getAuthPage(baseURL string) any {
+func GetAuthPage(baseURL string) any {
 	return models.AuthPage{BaseURL: baseURL}
 }
 
@@ -47,8 +47,7 @@ func SendAlert(w http.ResponseWriter, alertTitle string, errMsg string, fileName
 }
 
 
-func SendAuthPage(w http.ResponseWriter, baseURL string, fileName string) {
-	document := getAuthPage(baseURL)
+func SendAuthPage(w http.ResponseWriter, document any, fileName string) {
 	SendHTMLDocumentResponse(w, document, fileName)
 }
 

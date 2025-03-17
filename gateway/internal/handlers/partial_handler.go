@@ -90,13 +90,10 @@ func (h *PartialHandler) SidebarOrganizationListPartial(w http.ResponseWriter, r
 		return
 	}
 
-	listData, ok := jsonResponse.Data["list"].([]string)
+	document, ok := jsonResponse.Data["list"].([]models.CreateOrganization)
 	if !ok {
-		listData = []string{} // Ensure it's an empty slice, not nil
+		document = []models.CreateOrganization{} // Ensure it's an empty slice, not nil
 	}
 
-	document := models.OrganizationList{
-		List: listData,
-	}
 	utils.SendAuthPartial(w, document, "partials/sidebar_organization_list.html")
 }

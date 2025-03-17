@@ -57,6 +57,7 @@ func main() {
     protectedRouter := router.NewRoute().Subrouter()
     protectedRouter.Use(jwt.ProtectedMiddleware)
     protectedRouter.HandleFunc("/home", pagesHandler.HomePage).Methods("GET")
+    protectedRouter.HandleFunc("/profile", pagesHandler.ProfilePage).Methods("GET")
 	// Partial
 	partialRouter := protectedRouter.PathPrefix("/partial").Subrouter()
 	partialRouter.HandleFunc("/sidebar-profile", partialHandler.SidebarProfilePartial).Methods("GET")

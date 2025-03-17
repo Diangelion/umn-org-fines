@@ -1,13 +1,9 @@
 package models
 
-type OrganizationList struct {
-	List []string
-}
-
 type CreateOrganization struct {
-	OrganizationPhoto        string `form:"organizationPhoto"`
-	OrganizationTitle        string `form:"organizationTitle"`
-	OrganizationStartDate    string `form:"organizationStartDate"`
-	OrganizationEndDate      string `form:"organizationEndDate"`
-	OrganizationDescriptions string `form:"organizationDescriptions"`
+	OrganizationPhoto        string `form:"organizationPhoto", json:"organization_photo"`
+	OrganizationTitle        string `form:"organizationTitle", json:"organization_title"`
+	OrganizationStartDate    string `form:"organizationStartDate", json:"organization_start_date"`
+	OrganizationEndDate      string `form:"organizationEndDate", json:"organization_end_date"`
+	OrganizationDescriptions string `form:"organizationDescriptions", json:"organization_descriptions"`
 }

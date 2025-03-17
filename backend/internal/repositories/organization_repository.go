@@ -17,7 +17,7 @@ func NewOrganizationRepository(db *sql.DB) *OrganizationRepository {
 
 func (r *OrganizationRepository) GetListOrganizationRepository(orgList *models.GetListOrganization, userId string) error {
     query := `
-        SELECT org.name
+        SELECT name, photo, descriptions, start_date, end_date
         FROM organizations org
         JOIN user_organizations usr_orgs ON org.id = usr_orgs.organization_id
         WHERE usr_orgs.user_id = $1
@@ -32,16 +32,22 @@ func (r *OrganizationRepository) GetListOrganizationRepository(orgList *models.G
     defer rows.Close() // Ensure rows are closed after iteration
 
     // Always initialize as an empty slice to avoid nil
-    orgList.List = []string{}
+    orgList.List = []models.CreateOrganization{}
 
     // Iterate over the rows and append each organization name to the slice
     for rows.Next() {
-        var orgName string
-        if err := rows.Scan(&orgName); err != nil {
+        var org models.CreateOrganization
+        if err := rows.Scan(
+                    &org.OrganizationName,
+                    &org.OrganizationPhoto,
+                    &org.OrganizationDescriptions,
+                    &org.OrganizationStartDate,
+                    &org.OrganizationEndDate,
+        ); err != nil {
             log.Println("GetListOrganizationRepository | Error scanning row:", err)
             return errors.New("Unable to process list organization.")
         }
-        orgList.List = append(orgList.List, orgName)
+        orgList.List = append(orgList.List, org)
     }
 
     // Check for errors after iteration
