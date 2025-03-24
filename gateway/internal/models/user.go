@@ -27,6 +27,6 @@ type EditUser struct {
 
 type User struct {
 	Profile            EditUser
-	Organizations      []CreateOrganization
+	Organizations      []ListOrganization
 	TotalOrganizations int
 }

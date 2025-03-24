@@ -119,6 +119,8 @@ func (h *PagesHandler) ProfilePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	baseURL :=  utils.GetAuthPage(h.Config.BaseURL).(models.AuthPage)
+
     // Combine the data
 	user := &models.User{}
     if err := utils.CombineProfileAndOrganizations(user, userJsonResponse, orgJsonResponse); err != nil {
@@ -127,9 +129,14 @@ func (h *PagesHandler) ProfilePage(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+	document := models.ProfilePage{
+		AuthPage: baseURL,
+		User: *user,
+	}
+
 	w.Header().Set("HX-Reswap", "innerHTML")
 	w.Header().Set("HX-Retarget", "main")
-	utils.SendAuthPage(w, user, "pages/profile.html")
+	utils.SendAuthPage(w, document, "pages/profile.html")
 }
 
 func (h *PagesHandler) NotFoundPage(w http.ResponseWriter, r *http.Request) {

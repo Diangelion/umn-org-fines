@@ -1,11 +1,14 @@
 function triggerEditProfileForm() {
-  if (document.getElementById("edit-profile-form").style.display === "block")
+  console.log(document.getElementById("edit-profile-form").classList);
+  if (
+    !document.getElementById("edit-profile-form").classList.contains("hidden")
+  )
     return;
-  document.getElementById("edit-profile-form").style.display = "block";
+  document.getElementById("edit-profile-form").classList.remove("hidden");
 }
 
 function removeEditProfileForm() {
-  document.getElementById("edit-profile-form").style.display = "none";
+  document.getElementById("edit-profile-form").classList.add("hidden");
 }
 
 function setPreviewPhoto(e, id) {
